@@ -23,7 +23,7 @@ $result = $conn->query("SELECT * FROM products");
                 <li><a href="products.php" class="active">Inventory</a></li>
                 <li><a href="customers.php">Customers</a></li>
                 <li><a href="#">Waste</a></li>
-                <li><a href="#">Sales</a></li>
+                <li><a href="sales.php">Sales</a></li>
                 <li><a href="staff_admin.php">Staff</a></li>
                 <li><a href="#">Reports</a></li>
             </ul>
