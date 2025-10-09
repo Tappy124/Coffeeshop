@@ -1,4 +1,8 @@
-/* Reset */
+  @media (max-width: 900px) {
+.cards, .charts, .bottom { flex-direction: column; }
+.sidebar { width: 64px; }
+        }
+
 * {
   margin: 0;
   padding: 0;
@@ -6,23 +10,24 @@
   font-family: "Segoe UI", Tahoma, sans-serif;
 }
 
-body {
+html, body {
   background: #f8f8f8;
+  height: 100%;
+  margin: 0;
   color: #333;
 }
-
-.container {
-  display: flex;
-  height: 100vh;
+.container { 
+  display: flex; 
+  min-height: 100%; 
+  height: 100%; 
 }
 
-/* Sidebar */
-.sidebar {
-  width: 220px;
-  background: rgba(110, 160, 155);
-  color: white;
-  padding: 30px;
-}
+
+
+.sidebar { 
+  width: 220px; 
+  flex-shrink: 0;
+ }
 
 /* Sidebar Logo */
 .sidebar .logo {
@@ -31,21 +36,21 @@ body {
 }
 
 .sidebar .logo img {
-  width: 150px;    /* adjust size */
+  width: 150px;    
   height: auto;
 
 }
 
-/* Active link */
+
 .sidebar ul li a.active {
-  color: #704500;               /* Coffee brown text */
+  color: #704500;               
   font-weight: bold;
-  border-left: 4px solid #704500; /* Coffee brown border */
+  border-left: 4px solid #704500; 
   background: rgba(255, 255, 255, 0.1);
   border-radius: 4px;
 }
 
-/* Sidebar links */
+
 .sidebar ul li a {
   color: white;
   text-decoration: none;
@@ -56,7 +61,7 @@ body {
   transition: all 0.3s ease;
 }
 
-/* Hover effect */
+
 .sidebar ul li a:hover {
   border-left: 4px solid #704500;
   color: #704500; 
@@ -91,18 +96,22 @@ body {
   color: #9e6100;
 }
 
-/* Main */
-.main {
-  flex: 1;
-  padding: 20px;
-  overflow-y: auto;
+
+.main { 
+  flex: 1; 
+  display: flex; 
+  flex-direction: column; 
+  align-items: stretch; 
+  padding: 28px; 
+  box-sizing: border-box; 
+
 }
 
-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+header { 
+  display:flex; 
+  align-items:center; 
+  justify-content:space-between; 
+  margin-bottom:24px; 
 }
 
 header input {
@@ -111,12 +120,22 @@ header input {
   border-radius: 6px;
 }
 
-/* Cards */
+
 .cards {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
 }
+
+.card, .chart-box, .box { 
+  flex: 1; 
+}
+
+.cards, .charts, .bottom { 
+  display:flex; 
+  gap:24px; 
+  width:100%; }
+
 
 .card {
   flex: 1;
@@ -126,7 +145,7 @@ header input {
   box-shadow: 0px 2px 5px rgba(0,0,0,0.1);
 }
 
-/* Charts Section */
+
 .charts {
   display: flex;
   gap: 20px;
@@ -150,7 +169,7 @@ header input {
   justify-content: center;
 }
 
-/* Bottom Section */
+
 .bottom {
   display: flex;
   gap: 20px;
