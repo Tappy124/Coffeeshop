@@ -1,7 +1,6 @@
 <?php
 include "includes/db.php";
 
-// Handle Add Customer form submission (modal)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_customer'])) {
     $name = $conn->real_escape_string($_POST['name']);
     $email = $conn->real_escape_string($_POST['email']);
@@ -25,7 +24,6 @@ $result = $conn->query("SELECT * FROM customers");
 <body>
 <div class="container">
 
-    <!-- Sidebar -->
     <aside class="sidebar">
         <div class="logo">
             <img src="images/logo.png" alt="Logo">
@@ -42,7 +40,6 @@ $result = $conn->query("SELECT * FROM customers");
         </ul>
     </aside>
 
-    <!-- Main -->
     <main class="main">
         <header>
             <h1>Customers</h1>
@@ -81,7 +78,7 @@ $result = $conn->query("SELECT * FROM customers");
     </main>
 </div>
 
-<!-- Add Customer Modal -->
+
 <div class="modal" id="addCustomerModal">
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>

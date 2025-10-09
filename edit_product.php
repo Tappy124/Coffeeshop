@@ -7,14 +7,14 @@ if (!isset($_GET['id'])) {
 
 $id = $_GET['id'];
 
-// Get existing product
+
 $result = $conn->query("SELECT * FROM products WHERE id=$id");
 if ($result->num_rows == 0) {
     die("Product not found.");
 }
 $product = $result->fetch_assoc();
 
-// Update product
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name  = $_POST['name'];
     $category = $_POST['category'];

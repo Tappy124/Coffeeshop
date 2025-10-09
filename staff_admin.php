@@ -48,7 +48,7 @@ $mysqli->close();
 <body>
     <div class="container">
 
-        <!-- Sidebar -->
+      
         <aside class="sidebar">
             <div class="logo">
                 <img src="images/logo.png" alt="Logo">
@@ -65,14 +65,14 @@ $mysqli->close();
             </ul>
         </aside>
 
-        <!-- Main -->
+      
         <main class="main">
             <header>
                 <h1>Staffing & Admin Management</h1>
                 <button class="btn" id="addStaffBtn">+ Add Staff</button>
             </header>
 
-            <!-- Staff Table -->
+          
             <section class="box">
                 <h2>Staff List</h2>
                 <table>
@@ -97,7 +97,7 @@ $mysqli->close();
                 </table>
             </section>
 
-            <!-- Admin Table -->
+           
             <section class="box">
                 <h2>Admin Accounts</h2>
                 <table>
@@ -122,7 +122,7 @@ $mysqli->close();
         </main>
     </div>
 
-    <!-- Add Staff Modal -->
+   
     <div class="modal" id="addStaffModal">
         <div class="modal-content" style="box-shadow: 0 8px 24px rgba(0,0,0,0.18); border: 1px solid #e0e0e0;">
             <span class="close" id="closeModal">&times;</span>

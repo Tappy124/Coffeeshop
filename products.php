@@ -1,7 +1,7 @@
 <?php
 include "includes/db.php";
 
-// Handle Add Product form submission (modal)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     $name     = trim($_POST['name'] ?? '');
     $category = trim($_POST['category'] ?? '');
@@ -20,7 +20,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     }
 }
 
-// fetch products to show on page
+
 $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
 ?>
 <!DOCTYPE html>
@@ -34,7 +34,7 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
 <body>
 <div class="container">
 
-    <!-- Sidebar -->
+  
     <aside class="sidebar">
         <div class="logo">
             <img src="images/logo.png" alt="Logo" style="max-width:120px; display:block; margin:20px auto 8px;">
@@ -51,7 +51,7 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
         </ul>
     </aside>
 
-    <!-- Main -->
+ 
     <main class="main">
         <header>
             <div class="top-row" style="width:100%;">
@@ -100,7 +100,7 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
     </main>
 </div>
 
-<!-- Add Product Modal -->
+
 <div class="modal" id="addProductModal" aria-hidden="true">
     <div class="modal-content" role="dialog" aria-modal="true" aria-labelledby="addProductTitle">
         <span class="close" id="closeModal">&times;</span>
@@ -125,7 +125,7 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
 </div>
 
 <script>
-    // modal logic
+   
     const openBtn = document.getElementById('openAddProduct');
     const modal = document.getElementById('addProductModal');
     const closeBtn = document.getElementById('closeModal');

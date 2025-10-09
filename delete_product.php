@@ -7,7 +7,7 @@ if (!isset($_GET['id'])) {
 
 $id = $_GET['id'];
 
-// Delete product
+
 $sql = "DELETE FROM products WHERE id=$id";
 
 if ($conn->query($sql)) {
