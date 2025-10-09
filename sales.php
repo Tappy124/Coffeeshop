@@ -4,17 +4,37 @@ include "includes/db.php";
 
 // Handle Add Sale form submission (modal)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_sale'])) {
-    $product = $conn->real_escape_string($_POST['product']);
-    $quantity = (int)$_POST['quantity'];
-    $total_amount = (float)$_POST['total_amount'];
+    $product = $_POST['product'] ?? '';
+    $quantity = (int)($_POST['quantity'] ?? 0);
+    $total_amount = (float)($_POST['total_amount'] ?? 0);
     $sale_date = date('Y-m-d H:i:s');
-    $conn->query("INSERT INTO sales (product, quantity, total_amount, sale_date) VALUES ('$product', $quantity, $total_amount, '$sale_date')");
-    header("Location: sales.php");
-    exit;
+
+    // Use prepared statement to avoid SQL injection and capture errors
+    $stmt = $conn->prepare("INSERT INTO sales (product, quantity, total_amount, sale_date) VALUES (?, ?, ?, ?)");
+    if ($stmt) {
+        $stmt->bind_param("sids", $product, $quantity, $total_amount, $sale_date);
+        if (!$stmt->execute()) {
+            $form_error = "Insert failed: " . $stmt->error;
+        } else {
+            $stmt->close();
+            header("Location: sales.php");
+            exit;
+        }
+    } else {
+        $form_error = "Prepare failed: " . $conn->error;
+    }
 }
 
 
 $result = $conn->query("SELECT * FROM sales ORDER BY sale_date DESC");
+$rows = [];
+if ($result === false) {
+    // Capture query error but avoid calling methods on a boolean
+    $query_error = $conn->error;
+} else {
+    $rows = $result->fetch_all(MYSQLI_ASSOC);
+    $result->free();
+}
 ?>
 <!DOCTYPE html>
 <html>
@@ -64,7 +84,7 @@ $result = $conn->query("SELECT * FROM sales ORDER BY sale_date DESC");
                     </tr>
                 </thead>
                 <tbody>
-                <?php while($row = $result->fetch_assoc()): ?>
+                <?php foreach($rows as $row): ?>
                     <tr>
                         <td><?= $row['id'] ?></td>
                         <td><?= htmlspecialchars($row['product']) ?></td>
@@ -75,7 +95,7 @@ $result = $conn->query("SELECT * FROM sales ORDER BY sale_date DESC");
                             <a href="delete_sale.php?id=<?= $row['id'] ?>" class="action-btn delete-btn" onclick="return confirm('Delete this sale?')">Delete</a>
                         </td>
                     </tr>
-                <?php endwhile; ?>
+                <?php endforeach; ?>
                 </tbody>
             </table>
         </section>
