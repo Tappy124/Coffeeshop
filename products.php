@@ -27,7 +27,7 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
 <html>
 <head>
     <title>Product Management</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
     
 </head>
