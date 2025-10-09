@@ -1,6 +1,5 @@
 <?php
-// dashboard.php
-// You can later connect this to your database for real data
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -8,19 +7,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Analytics Dashboard</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
 
             <?php
-    // Connect to DB
     $mysqli = new mysqli("localhost", "root", "", "coffee_shop");
     if ($mysqli->connect_errno) {
         die("Failed to connect to MySQL: " . $mysqli->connect_error);
     }
     
-    // Get Daily Sales (sum of today's sales)
     $daily_sales = 0;
     $result = $mysqli->query("SELECT SUM(total_amount) AS sales FROM sales WHERE DATE(sale_date) = CURDATE()");
     if ($row = $result->fetch_assoc()) {
@@ -28,7 +25,7 @@
     }
     $result->free();
     
-    // Get Waste Cost (sum of today's waste cost)
+
     $waste_cost = 0;
     $result = $mysqli->query("SELECT SUM(cost) AS waste FROM waste WHERE DATE(waste_date) = CURDATE()");
     if ($row = $result->fetch_assoc()) {
@@ -36,7 +33,7 @@
     }
     $result->free();
     
-    // Get New Customers (joined today)
+   
     $new_customers = 0;
     $result = $mysqli->query("SELECT COUNT(*) AS new_cust FROM customers WHERE DATE(joined_at) = CURDATE()");
     if ($row = $result->fetch_assoc()) {
@@ -57,7 +54,7 @@
     <body>
         <div class="container">
     
-            <!-- Sidebar -->
+          
             <aside class="sidebar">
                 <div class="logo">
                     <img src="images/logo.png" alt="Logo">
@@ -74,7 +71,7 @@
                 </ul>
             </aside>
     
-            <!-- Main Content -->
+            
             <main class="main">
                 <header>
                     <h1>Analytics Dashboard</h1>

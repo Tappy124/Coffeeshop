@@ -1,6 +1,6 @@
 <?php
 
-include "db.php";
+include "includes/db.php";
 
 // Handle Add Sale form submission (modal)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_sale'])) {

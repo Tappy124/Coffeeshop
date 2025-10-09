@@ -1,5 +1,5 @@
 <?php
-include "db.php";
+include "includes/db.php";
 
 // Handle Add Customer form submission (modal)
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_customer'])) {
@@ -18,20 +18,9 @@ $result = $conn->query("SELECT * FROM customers");
 <html>
 <head>
     <title>Customer Management</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5); z-index:999;}
-        .modal-content { background:#fff; margin:8% auto; padding:24px; width:340px; border-radius:8px; box-shadow: 0 8px 24px rgba(0,0,0,0.18); border: 1px solid #e0e0e0;}
-        .close { float:right; cursor:pointer; font-size:22px; color:#4a6c6f; font-weight:bold;}
-        .close:hover { color:#d32f2f; }
-        .modal-content label { font-weight:500; color:#333; display:block; margin-bottom:4px;}
-        .modal-content input[type="text"], .modal-content input[type="email"] {
-            width:100%; padding:8px; border-radius:4px; border:1px solid #bdbdbd; margin-bottom:12px;
-        }
-        .modal-content button {
-            background:#4a6c6f; color:#fff; border:none; border-radius:4px; padding:10px; font-weight:600; width:100%; cursor:pointer;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
+    
 </head>
 <body>
 <div class="container">

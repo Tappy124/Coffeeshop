@@ -42,29 +42,8 @@ $mysqli->close();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Staffing & Admin Panel</title>
-    <link rel="stylesheet" href="style.css">
-    <style>
-        .modal { display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.5);}
-        .modal-content { background:#fff; margin:10% auto; padding:20px; width:300px; border-radius:8px;}
-        .close { float:right; cursor:pointer; font-size:20px;}
-        .modal-content input[type="text"], 
-        .modal-content select {
-            width: 100%;
-            box-sizing: border-box;
-            margin-bottom: 6px;
-        }
-        .modal-content label {
-            margin-bottom: 2px;
-        }
-        .modal-content .close {
-            color: #4a6c6f;
-            font-weight: bold;
-            transition: color 0.2s;
-        }
-        .modal-content .close:hover {
-            color: #d32f2f;
-        }
-    </style>
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/modal.css">
 </head>
 <body>
     <div class="container">
