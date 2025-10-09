@@ -27,6 +27,9 @@ html, body {
 .sidebar { 
   width: 220px; 
   flex-shrink: 0;
+  background: rgba(110, 160, 155);
+  color: white;
+  padding: 30px;
  }
 
 /* Sidebar Logo */
