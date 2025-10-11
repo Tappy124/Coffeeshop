@@ -2,7 +2,7 @@
 
 include "includes/db.php";
 
-// Handle Add Sale form submission (modal)
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_sale'])) {
     $product = $conn->real_escape_string($_POST['product']);
     $quantity = (int)$_POST['quantity'];
@@ -20,6 +20,7 @@ $result = $conn->query("SELECT * FROM sales ORDER BY sale_date DESC");
 <html>
 <head>
     <title>Sales Management</title>
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
    
@@ -48,9 +49,13 @@ $result = $conn->query("SELECT * FROM sales ORDER BY sale_date DESC");
     <main class="main">
         <header>
             <h1>Sales</h1>
-            <button class="btn" id="addSaleBtn">+ Add Sale</button>
+            
+            <div style="display:flex; gap:10px; align-items:center;">
+                    <button class="btn" id="addSaleBtn">+ Add Sale</button>
+                    <?php include 'includes/theme-toggle.php'; ?>
+                </div>
+              
         </header>
-
         <section class="box">
             <table>
                 <thead>

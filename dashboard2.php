@@ -34,16 +34,17 @@ $mysqli->close();
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Analytics Dashboard</title>
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
     <div class="container">
         <aside class="sidebar">
-            <div class="logo" style="text-align:center; padding:20px 0;">
-                <img src="images/logo.png" alt="Logo" style="max-width:110px; height:auto;">
+            <div class="logo">
+                <img src="images/logo.png" alt="Logo">
             </div>
-            <h2 style="padding-left:18px; color:#fff;">Dashboard</h2>
-            <ul style="list-style:none; padding-left:18px;">
+            <h2>Dashboard</h2>
+            <ul>
                 <li><a href="dashboard2.php" class="active">Dashboard</a></li>
                 <li><a href="products.php">Inventory</a></li>
                 <li><a href="customers.php">Customers</a></li>
@@ -56,46 +57,49 @@ $mysqli->close();
 
         <main class="main">
             <header>
-                <h1 style="margin:0;">Analytics Dashboard</h1>
-                <input type="text" placeholder="Search..." style="padding:8px 10px; border-radius:6px; border:1px solid #ccc;">
+                <h1>Analytics Dashboard</h1>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <input type="text" placeholder="Search..." >
+                    <?php include 'includes/theme-toggle.php'; ?>
+                </div>
             </header>
 
             <section class="cards" aria-label="summary cards">
-                <div class="card" style="background:#fff; padding:18px; border-radius:8px;">
-                    <h3 style="margin:0 0 8px 0;">Daily Sales</h3>
-                    <p style="margin:0; font-weight:700;">₱<?php echo number_format($daily_sales, 2); ?></p>
+                <div class="card" >
+                    <h3 >Daily Sales</h3>
+                    <p>₱<?php echo number_format($daily_sales, 2); ?></p>
                 </div>
-                <div class="card" style="background:#fff; padding:18px; border-radius:8px;">
-                    <h3 style="margin:0 0 8px 0;">Waste Cost</h3>
-                    <p style="margin:0; font-weight:700;">₱<?php echo number_format($waste_cost, 2); ?></p>
+                <div class="card" >
+                    <h3>Waste Cost</h3>
+                    <p>₱<?php echo number_format($waste_cost, 2); ?></p>
                 </div>
-                <div class="card" style="background:#fff; padding:18px; border-radius:8px;">
-                    <h3 style="margin:0 0 8px 0;">New Customers</h3>
-                    <p style="margin:0; font-weight:700;">+<?php echo intval($new_customers); ?></p>
+                <div class="card" >
+                    <h3>New Customers</h3>
+                    <p>+<?php echo intval($new_customers); ?></p>
                 </div>
             </section>
 
-            <section class="charts" style="margin-top:20px;">
-                <div class="chart-box" style="background:#fafafa; padding:18px; border-radius:8px; min-height:180px;">
+            <section class="charts">
+                <div class="chart-box">
                     <h3>Sales Performance</h3>
-                    <div class="chart" style="padding-top:40px; color:#888;">[Chart Here]</div>
+                    <div class="chart">[Chart Here]</div>
                 </div>
-                <div class="chart-box" style="background:#fafafa; padding:18px; border-radius:8px; min-height:180px;">
+                <div class="chart-box">
                     <h3>Waste Tracking</h3>
-                    <div class="chart" style="padding-top:40px; color:#888;">[Chart Here]</div>
+                    <div class="chart">[Chart Here]</div>
                 </div>
             </section>
 
-            <section class="bottom" style="margin-top:20px;">
-                <div class="box" style="background:#fff; padding:18px; border-radius:8px;">
+            <section class="bottom">
+                <div class="box">
                     <h3>Customer Management</h3>
                     <p>Track new and loyal customers.</p>
                 </div>
-                <div class="box" style="background:#fff; padding:18px; border-radius:8px;">
+                <div class="box">
                     <h3>Inventory Low Stock</h3>
                     <p>List of items to reorder.</p>
                 </div>
-                <div class="box" style="background:#fff; padding:18px; border-radius:8px;">
+                <div class="box">
                     <h3>Upcoming Deliveries</h3>
                     <p>Next delivery schedule.</p>
                 </div>
@@ -103,5 +107,35 @@ $mysqli->close();
         </main>
     </div>
 </body>
+<script>
+    // theme toggle: reads/stores 'theme' in localStorage and toggles body.dark-mode
+    (function(){
+        const body = document.body;
+        const btn = document.getElementById('themeToggle');
+
+        function applyTheme(mode){
+            if(mode === 'dark'){
+                body.classList.add('dark-mode');
+                btn.textContent = 'Light';
+                btn.setAttribute('aria-pressed','true');
+            } else {
+                body.classList.remove('dark-mode');
+                btn.textContent = 'Dark';
+                btn.setAttribute('aria-pressed','false');
+            }
+        }
+
+        // init
+        const saved = localStorage.getItem('site-theme');
+        applyTheme(saved === 'dark' ? 'dark' : 'light');
+
+        btn.addEventListener('click', ()=>{
+            const isDark = body.classList.toggle('dark-mode');
+            const newMode = isDark ? 'dark' : 'light';
+            localStorage.setItem('site-theme', newMode);
+            applyTheme(newMode);
+        });
+    })();
+</script>
 </html>
 

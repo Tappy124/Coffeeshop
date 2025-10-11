@@ -1,6 +1,7 @@
 <?php
 include "includes/db.php";
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_customer'])) {
     $name = $conn->real_escape_string($_POST['name']);
     $email = $conn->real_escape_string($_POST['email']);
@@ -17,13 +18,13 @@ $result = $conn->query("SELECT * FROM customers");
 <html>
 <head>
     <title>Customer Management</title>
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
     
 </head>
 <body>
 <div class="container">
-
     <aside class="sidebar">
         <div class="logo">
             <img src="images/logo.png" alt="Logo">
@@ -43,7 +44,11 @@ $result = $conn->query("SELECT * FROM customers");
     <main class="main">
         <header>
             <h1>Customers</h1>
-            <button class="btn" id="addCustomerBtn">+ Add Customer</button>
+            <div style="display:flex; gap:10px; align-items:center;">
+                    <button class="btn" id="addCustomerBtn">+ Add Customer</button>
+                    <?php include 'includes/theme-toggle.php'; ?>
+                </div>
+            
         </header>
 
         <section class="box">
@@ -82,7 +87,7 @@ $result = $conn->query("SELECT * FROM customers");
 <div class="modal" id="addCustomerModal">
     <div class="modal-content">
         <span class="close" id="closeModal">&times;</span>
-        <h2 style="margin-top:0; color:#4a6c6f; text-align:center;">Add Customer</h2>
+        <h2>Add Customer</h2>
         <form method="POST" action="customers.php">
             <input type="hidden" name="add_customer" value="1">
             <label>Name:</label>

@@ -1,6 +1,7 @@
 <?php
 include "includes/db.php";
 
+
 if (!isset($_GET['id'])) {
     die("Product ID not provided.");
 }

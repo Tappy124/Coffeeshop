@@ -2,6 +2,7 @@
 include "includes/db.php";
 
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['add_product'])) {
     $name     = trim($_POST['name'] ?? '');
     $category = trim($_POST['category'] ?? '');
@@ -27,17 +28,16 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
 <html>
 <head>
     <title>Product Management</title>
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
     
 </head>
 <body>
 <div class="container">
-
-  
     <aside class="sidebar">
         <div class="logo">
-            <img src="images/logo.png" alt="Logo" style="max-width:120px; display:block; margin:20px auto 8px;">
+            <img src="images/logo.png" alt="Logo">
         </div>
         <h2>Dashboard</h2>
         <ul>
@@ -54,9 +54,12 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
  
     <main class="main">
         <header>
-            <div class="top-row" style="width:100%;">
+            <div class="top-row">
                 <h1>Products</h1>
-                <button class="btn" id="openAddProduct">+ Add Product</button>
+                <div style="display:flex; gap:10px; align-items:center;">
+                    <button class="btn" id="openAddProduct">+ Add Product</button>
+                    <?php include 'includes/theme-toggle.php'; ?>
+                </div>
             </div>
         </header>
 
@@ -92,7 +95,7 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
                         </tr>
                     <?php endwhile; ?>
                 <?php else: ?>
-                    <tr><td colspan="6" style="text-align:center;padding:20px;">No products found.</td></tr>
+                    <tr><td colspan="6">No products found.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>
@@ -109,16 +112,12 @@ $result = $conn->query("SELECT * FROM products ORDER BY id DESC");
             <input type="hidden" name="add_product" value="1">
             <label>Product Name</label>
             <input type="text" name="name" required>
-
             <label>Category</label>
             <input type="text" name="category">
-
             <label>Price</label>
             <input type="number" step="0.01" name="price" required>
-
             <label>Stock</label>
             <input type="number" name="stock" required>
-
             <button type="submit">Save Product</button>
         </form>
     </div>

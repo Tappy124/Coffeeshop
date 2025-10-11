@@ -1,4 +1,4 @@
-  @media (max-width: 900px) {
+@media (max-width: 900px) {
 .cards, .charts, .bottom { flex-direction: column; }
 .sidebar { width: 64px; }
         }
@@ -9,6 +9,57 @@
   box-sizing: border-box;
   font-family: "Segoe UI", Tahoma, sans-serif;
 }
+
+/* Theme variables (light by default) */
+:root{
+  --bg: #f9f9f9;
+  --panel: #ffffff;
+  --muted: #f5f5f5;
+  --text: #222;
+  --subtext: #666;
+  --accent: #4a6c6f;
+  --sidebar-bg: #6fa6a8;
+  --card-shadow: rgba(0,0,0,0.04);
+}
+
+/* Dark mode (toggle by adding .dark-mode on body) */
+body.dark-mode{
+  --bg: #0f1720;
+  --panel: #0b1320;
+  --muted: #0a0f17;
+  --text: #e6eef5;
+  --subtext: #bfcbd6;
+  --accent: #6fb7b1;
+  --sidebar-bg: #244a47;
+  --card-shadow: rgba(0,0,0,0.6);
+}
+
+/* Apply variables */
+html, body {
+  background: var(--bg) !important;
+  color: var(--text);
+  height: 100%;
+}
+.sidebar { background: var(--sidebar-bg) !important; }
+.card, .chart-box, .box, .modal-content, table, section.box {
+  background: var(--panel) !important;
+  box-shadow: 0 2px 8px var(--card-shadow);
+  color: var(--text);
+}
+header h1, .card h3, .chart-box h3, .box h3 { color: var(--accent); }
+header input, .btn, .action-btn { border-color: rgba(0,0,0,0.08); color: var(--text); }
+
+/* Theme toggle slider styles */
+.theme-toggle-wrapper { display:inline-flex; align-items:center; }
+.switch { position: relative; display:inline-block; width:48px; height:28px; }
+.switch input { opacity: 0; width: 0; height: 0; }
+.slider { position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background: #ccc; transition: .25s; border-radius: 28px; }
+.slider:before { position: absolute; content: ""; height: 22px; width: 22px; left: 3px; bottom: 3px; background: white; transition: .25s; border-radius: 50%; box-shadow: 0 2px 6px rgba(0,0,0,0.12); }
+input:checked + .slider { background: var(--accent); }
+input:checked + .slider:before { transform: translateX(20px); }
+
+/* small accessibility focus */
+.switch input:focus + .slider { box-shadow: 0 0 0 3px rgba(74,108,111,0.15); }
 
 html, body {
   background: #f8f8f8;
@@ -29,7 +80,7 @@ html, body {
   flex-shrink: 0;
   background: rgba(110, 160, 155);
   color: white;
-  
+  padding: 10px 18px;
  }
 
 /* Sidebar Logo */
@@ -39,9 +90,12 @@ html, body {
 }
 
 .sidebar .logo img {
-  width: 150px;    
+  
+  max-width: 150px;   
+  width: 100%;
   height: auto;
-
+  display: block;
+  margin: 20px auto;
 }
 
 
@@ -153,6 +207,8 @@ header input {
   display: flex;
   gap: 20px;
   margin-bottom: 20px;
+  padding:18px; 
+  border-radius:8px;
 }
 
 .chart-box {
@@ -188,6 +244,13 @@ header input {
 
 
 /*STAFF ADMIN */
+
+
+.action-btn { display:inline-block; padding:6px 10px; border-radius:4px; text-decoration:none; font-weight:600; margin-right:6px; }
+.edit-btn { background:#e0f7fa; color:#00796b; border:1px solid #b2dfdb; }
+.delete-btn { background:#ffebee; color:#c62828; border:1px solid #ffcdd2; }
+.delete-btn:hover { background:#ffcdd2; color:#b71c1c; }
+
 
 /* --- Previous styles (keep them) --- */
 
@@ -229,4 +292,19 @@ table th {
 
 table tr:hover {
   background: #f9f9f9;
+}
+
+/* Ensure top-row stretches and spaces items */
+.top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* pushes button to the right */
+    width: 100%;
+    gap: 12px;
+    box-sizing: border-box;
+}
+/* ensure .btn doesn't collapse */
+.top-row .btn {
+    margin-left: 0;
+    white-space: nowrap;
 }

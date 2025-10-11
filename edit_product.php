@@ -1,6 +1,7 @@
 <?php
 include "includes/db.php";
 
+
 if (!isset($_GET['id'])) {
     die("Product ID not provided.");
 }
@@ -37,10 +38,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html>
 <head>
     <title>Edit Product</title>
-    <link rel="stylesheet" href="style.css">
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-<div class="main" style="padding:20px;">
+<div class="main">
     <h1>Edit Product</h1>
     <form method="POST">
         <label>Product Name</label><br>
