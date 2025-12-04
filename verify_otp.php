@@ -1,4 +1,4 @@
-<?php
+ZZ<?php
 session_start();
 
 // Redirect if the user hasn't started the forgot password process
