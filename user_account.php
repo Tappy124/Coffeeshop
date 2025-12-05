@@ -223,13 +223,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_account'])) {
     <main class="main">
         <header>
             <h1>My Account</h1>
-            <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+            <div class="header-actions flex-gap-center">
             </div>
         </header>
 
-        <section class="box" style="max-width: 600px; margin: 20px auto;">
+        <section class="box max-width-600">
             <h2>Edit Your Account Details</h2>
-            <p style="font-size: 0.9rem; color: var(--subtext); margin-bottom: 20px;">
+            <p class="muted-note">
                 Update your username or password here. You must provide your current password to make any changes.
             </p>
 
@@ -246,7 +246,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_account'])) {
                 <label for="username">Username (must be a valid email)</label>
                 <input type="email" id="username" name="username" value="<?= htmlspecialchars($current_username) ?>" required placeholder="e.g., user@gmail.com">
 
-                <hr style="border: 0; border-top: 1px solid var(--muted); margin: 25px 0;">
+                <hr class="hr-muted">
 
                 <label for="new_password">New Password (optional)</label>
                 <div class="password-input-container">
@@ -264,7 +264,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_account'])) {
 
                 <div id="password-validation-errors" class="validation-errors"></div>
 
-                <hr style="border: 0; border-top: 1px solid var(--muted); margin: 25px 0;">
+                <hr class="hr-muted">
 
                 <label for="current_password">Current Password (Required to Save Changes)</label>
                 <div class="password-input-container">
@@ -281,11 +281,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['update_account'])) {
 </div>
 
 <!-- Generic Confirmation Modal -->
-<div class="modal" id="confirmModal">
-    <div class="modal-content" style="max-width: 450px; text-align: center;">
+    <div class="modal" id="confirmModal">
+    <div class="modal-content max-width-450 text-center">
         <span class="close" id="closeConfirmModal">&times;</span>
         <h2 id="confirmTitle">Please Confirm</h2>
-        <p id="confirmMessage" style="margin: 20px 0; font-size: 1.1rem;"></p>
+        <p id="confirmMessage" class="confirm-message"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

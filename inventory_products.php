@@ -254,6 +254,7 @@ function formatTotalContent(?float $total_content_stock, ?string $content): stri
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     
 </head>
 <body>
@@ -282,7 +283,7 @@ function formatTotalContent(?float $total_content_stock, ?string $content): stri
         <header>
             <div class="top-row">
                 <h1>Inventory Management</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                     <button class="btn" id="openAddProduct">+ Add Product</button>
                 </div>
             </div>
@@ -302,7 +303,7 @@ function formatTotalContent(?float $total_content_stock, ?string $content): stri
                     <option value="ASC" <?= $sort_order == 'ASC' ? 'selected' : '' ?>>Ascending</option>
                     <option value="DESC" <?= $sort_order == 'DESC' ? 'selected' : '' ?>>Descending</option>
                 </select>
-                <select name="filter_category" id="categoryFilterSelect" style="display: none;">
+                <select name="filter_category" id="categoryFilterSelect" class="hidden">
                     <option value="">All Categories</option>
                     <option value="Basic Ingredient" <?= $filter_category == 'Basic Ingredient' ? 'selected' : '' ?>>Basic Ingredient</option>
                     <option value="Cups and Lids" <?= $filter_category == 'Cups and Lids' ? 'selected' : '' ?>>Cups and Lids</option>
@@ -357,7 +358,7 @@ function formatTotalContent(?float $total_content_stock, ?string $content): stri
                                         data-content="<?= htmlspecialchars($row['content'] ?? '', ENT_QUOTES) ?>">
                                         Edit
                                     </button>
-                                    <form method="POST" action="delete_product.php?id=<?= htmlspecialchars($row['id']) ?>" style="display:inline;">
+                                    <form method="POST" action="delete_product.php?id=<?= htmlspecialchars($row['id']) ?>" class="inline">
                                         <!-- The form action will be handled by JS, but this is a good fallback -->
                                         <input type="hidden" name="delete_product" value="1">
                                         <button type="button" class="action-btn delete-btn">Delete</button>
@@ -402,9 +403,9 @@ function formatTotalContent(?float $total_content_stock, ?string $content): stri
             <input type="number" name="stock" required placeholder="e.g., 100">
             
             <label>Content</label>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <input type="number" step="any" name="content_value" id="add_content_value" placeholder="e.g., 1.5" style="margin-bottom: 0;">
-                <select name="content_unit" id="add_content_unit" required style="margin-bottom: 0;">
+            <div class="flex-gap-center">
+                <input class="no-mb" type="number" step="any" name="content_value" id="add_content_value" placeholder="e.g., 1.5">
+                <select class="no-mb" name="content_unit" id="add_content_unit" required>
                     <option value="" disabled selected>Unit</option>
                     <option value="KG">KG</option>
                     <option value="G">G</option>
@@ -455,9 +456,9 @@ function formatTotalContent(?float $total_content_stock, ?string $content): stri
             <input type="number" name="edit_stock" id="edit_stock" required placeholder="e.g., 100">
 
             <label>Content</label>
-            <div style="display: flex; gap: 10px; align-items: center;">
-                <input type="number" step="any" name="edit_content_value" id="edit_content_value" placeholder="e.g., 1.5" style="margin-bottom: 0;">
-                <select name="edit_content_unit" id="edit_content_unit" required style="margin-bottom: 0;">
+            <div class="flex-gap-center">
+                <input class="no-mb" type="number" step="any" name="edit_content_value" id="edit_content_value" placeholder="e.g., 1.5">
+                <select class="no-mb" name="edit_content_unit" id="edit_content_unit" required>
                     <option value="" disabled selected>Unit</option>
                     <option value="KG">KG</option>
                     <option value="G">G</option>
@@ -479,9 +480,9 @@ function formatTotalContent(?float $total_content_stock, ?string $content): stri
 
 <!-- Generic Confirmation Modal -->
 <div class="modal" id="confirmModal" aria-hidden="true">
-    <div class="modal-content" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle" style="max-width: 500px;">
+    <div class="modal-content max-width-500" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
         <h2 id="confirmTitle">Please Confirm</h2>
-        <p id="confirmMessage" style="margin: 20px 0; text-align: center; font-size: 1.1rem;"></p>
+        <p id="confirmMessage" class="confirm-message"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancel">Cancel</button>

@@ -220,50 +220,7 @@ sort($all_categories);
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
-    <style>
-        #size_wrapper, #unit_wrapper { display: none; } /* Hide by default */
-        /* Apply modal form styles to the main content form */
-        .main .box form input[type="text"],
-        .main .box form input[type="number"],
-        .main .box form select {
-            width: 100%;
-            padding: 10px;
-            border-radius: 4px;
-            border: 1px solid #bdbdbd;
-            margin-bottom: 12px;
-            background-color: var(--bg);
-            color: var(--text);
-            box-sizing: border-box;
-            font-size: 1rem;
-            appearance: none;
-            transition: border-color 0.2s, box-shadow 0.2s;
-        }
-        .main .box form select {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23888' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.75rem center;
-            background-size: 16px 12px;
-            padding-right: 36px;
-        }
-        .main .box form select:invalid { color: #777777; }
-        .main .box form input:hover,
-        .main .box form select:hover { border-color: var(--accent); }
-        .main .box form input:focus,
-        .main .box form select:focus {
-            outline: none;
-            border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(74, 108, 111, 0.2);
-        }
-        .main .box .form-actions button {
-            width: 100%;
-            padding: 12px 20px;
-            margin-top: 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 16px;
-            font-weight: 600;
-        }
-    </style>
+    <link rel="stylesheet" href="css/extracted_styles.css">
 </head>
 <body>
     <div class="container">
@@ -283,11 +240,11 @@ sort($all_categories);
         <main class="main">
             <header>
                 <h1>Log a New Waste Record</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                 </div>
             </header>
 
-            <section class="box" style="max-width: 500px; margin: 20px auto;">
+            <section class="box max-width-500">
                 <h2 id="logWasteTitle">Waste Details</h2>
                 <form method="POST" action="staff_log_waste.php" id="logWasteForm" autocomplete="off">
                     <input type="hidden" name="add_waste" value="1"> 
@@ -325,10 +282,10 @@ sort($all_categories);
                     </div>
 
                     <label>Quantity Wasted</label>
-                    <div style="display: flex; align-items: center; gap: 10px;">
+                    <div class="flex-gap-center">
                         <input type="hidden" name="inventory_unit" id="inventory_unit_hidden">
-                        <input type="number" name="quantity" required min="1" placeholder="e.g., 1" style="margin-bottom: 12px;">
-                        <input type="text" id="unit_display" readonly placeholder="Unit" style="width: 100px; text-align: center; margin-bottom: 12px;">
+                        <input type="number" name="quantity" required min="1" placeholder="e.g., 1" class="mb-12">
+                        <input type="text" id="unit_display" readonly placeholder="Unit" class="unit-display">
                     </div>
 
                     <label>Reason</label>
@@ -353,7 +310,7 @@ sort($all_categories);
     <div class="modal" id="confirmModal" role="alertdialog" aria-modal="true" aria-labelledby="confirmTitle">
         <div class="modal-content">
             <h2 id="confirmTitle">Please Confirm</h2>
-            <p id="confirmMessage" style="text-align: center; margin: 20px 0;"></p>
+            <p id="confirmMessage" class="text-center"></p>
             <div class="form-actions">
                 <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
                 <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

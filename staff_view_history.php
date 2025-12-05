@@ -132,37 +132,7 @@ $conn->close();
     <link rel="stylesheet" href="css/style.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Style for the date input placeholder */
-        .filter-form input[type="date"] {
-            position: relative;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            background-color: var(--bg);
-            color: var(--text);
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-        
-        /* Style the placeholder text for Webkit browsers (Chrome, Safari) */
-        .filter-form input[type="date"]::-webkit-input-placeholder { color: #777; }
-        
-        /* Style the placeholder text for Firefox */
-        .filter-form input[type="date"]:-moz-placeholder { color: #777; opacity: 1; }
-        .filter-form input[type="date"]::-moz-placeholder { color: #777; opacity: 1; }
-        
-        /* Style the placeholder text for Edge & IE */
-        .filter-form input[type="date"]:-ms-input-placeholder { color: #777; }
-        .filter-form input[type="date"]::-ms-input-placeholder { color: #777; }
-        
-        /* Show placeholder when the input is not focused and has no value */
-        .filter-form input[type="date"]:not(:focus):not([value]):not([value=""])::before {
-            content: attr(placeholder);
-            color: #777;
-        }
-
-    </style>
+    <link rel="stylesheet" href="css/extracted_styles.css">
 </head>
 <body>
 <div class="container">
@@ -182,10 +152,10 @@ $conn->close();
     <main class="main">
         <header>
             <h1>View History</h1>
-            <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+            <div class="header-actions flex-gap-center">
             </div>
         </header>
-        <p style="font-size: 0.9rem; color: var(--subtext); margin-bottom: 20px; line-height: 1.5;">
+        <p class="muted-note">
             Review all previously logged sales and waste records. This is a read-only feature to monitor activities, verify entries, and enhance transparency.
         </p>
 
@@ -219,7 +189,7 @@ $conn->close();
 
         <section class="box">
             <h2>All Transaction Records</h2>
-            <div class="table-container" style="max-height: 350px; margin-top: 20px;">
+            <div class="table-container table-scroll">
                 <table>
                 <thead><tr><th>Type</th><th>Product</th><th>Size</th><th>Qty</th><th>Amount</th><th>Reason</th><th>Staff</th><th>Date</th></tr></thead>
                 <tbody>
@@ -257,9 +227,9 @@ $conn->close();
             </table>
             </div>
         </section>
-        <section class="box" style="margin-top: 24px;">
+        <section class="box mt-15">
             <h3>Sales vs. Waste Transactions</h3>
-            <div class="chart-container" style="height: 300px; margin-top: 15px; cursor: pointer;">
+            <div class="chart-container chart-container-small">
                 <canvas id="salesWasteCountChart"></canvas>
             </div>
         </section>
@@ -268,10 +238,10 @@ $conn->close();
 
 <!-- Chart Modal -->
 <div class="modal" id="chartModal">
-    <div class="modal-content" id="chartModalContent" style="max-width: 80%; width: 900px;">
+    <div class="modal-content modal-content-wide" id="chartModalContent">
         <span class="close" id="closeChartModal">&times;</span>
         <h2 id="chartModalTitle">Chart View</h2>
-        <div class="chart-container" style="height: 70vh;">
+        <div class="chart-container chart-container-large">
             <canvas id="modalChartCanvas"></canvas>
         </div>
     </div>
@@ -282,7 +252,7 @@ $conn->close();
 <div class="modal" id="confirmModal">
     <div class="modal-content">
         <h2 id="confirmTitle">Please Confirm</h2>
-        <p id="confirmMessage" style="text-align: center; margin: 20px 0;"></p>
+    <p id="confirmMessage" class="text-center"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

@@ -33,33 +33,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Verify OTP - Brewventory</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <style>
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--bg); }
-        .login-container { width: 100%; max-width: 400px; padding: 40px; background-color: var(--panel); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .login-container img { width: 120px; height: 120px; margin-bottom: 20px; }
-        .login-container h1 { color: var(--accent); margin-bottom: 10px; }
-        .login-container p { color: var(--subtext); margin-bottom: 25px; }
-        .login-container input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; text-align: center; letter-spacing: 5px; }
-        .login-container button { width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: var(--accent); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .login-container button:hover { opacity: 0.9; }
-        .login-container .back-link { display: block; margin-top: 20px; color: var(--accent); text-decoration: none; }
-        .error-message { color: #c62828; background-color: #ffebee; padding: 10px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #ffcdd2; }
-        .action-links { display: flex; justify-content: space-between; margin-top: 20px; font-size: 0.9rem; }
-        .action-links a { color: var(--subtext); text-decoration: none; }
-        .action-links a:hover { color: var(--accent); }
-        #cancelReset:hover {
-            color: #c62828; /* Red hover for cancel */
-        }
-
-        /* Style for the error toast notification */
-        .toast.error {
-            background-color: #c62828; /* Red for errors */
-        }
-    </style>
+    <!-- page-specific CSS moved to css/extracted_styles.css -->
 </head>
-<body>
-    <div class="login-container">
+<body class="verify-otp-body">
+    <div class="verify-otp-container">
         <img src="images/logo.png" alt="Bigger Brew Logo">
         <h1>Verify Your Identity</h1>
         <p>An OTP has been sent to <strong><?= htmlspecialchars($_SESSION['reset_username']) ?></strong>. Please enter it below.</p>
@@ -67,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <input type="text" name="otp" placeholder="Enter 6-digit OTP" required maxlength="6" pattern="\d{6}" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             <button type="submit">Verify Code</button>
         </form>
-        <div class="action-links">
+        <div class="verify-otp-action-links">
             <a href="#" id="cancelReset">Cancel</a>
             <a href="#" id="resendOtpLink">Request a new code</a>
         </div>
@@ -75,10 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <!-- Generic Confirmation Modal -->
     <div class="modal" id="confirmModal">
-        <div class="modal-content" style="max-width: 450px; text-align: center;">
+        <div class="modal-content max-width-450 text-center">
             <span class="close" id="closeConfirmModal">&times;</span>
             <h2 id="confirmTitle">Please Confirm</h2>
-            <p id="confirmMessage" style="margin: 20px 0; font-size: 1.1rem;"></p>
+            <p id="confirmMessage" class="confirm-message"></p>
             <div class="form-actions">
                 <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
                 <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

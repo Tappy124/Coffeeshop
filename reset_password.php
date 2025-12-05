@@ -68,58 +68,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Reset Password - Brewventory</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <style>
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--bg); }
-        .login-container { width: 100%; max-width: 400px; padding: 40px; background-color: var(--panel); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .login-container img { width: 120px; height: 120px; margin-bottom: 20px; }
-        .login-container h1 { color: var(--accent); margin-bottom: 10px; }
-        .login-container p { color: var(--subtext); margin-bottom: 25px; }
-        .login-container input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
-        .login-container button { width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: var(--accent); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .login-container button:hover { opacity: 0.9; }
-        .error-message { color: #c62828; background-color: #ffebee; padding: 10px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #ffcdd2; text-align: left; }
-        
-        /* --- Password validation styles from user_account.php --- */
-        .password-input-container { position: relative; }
-        .password-input-container input { padding-right: 120px; margin-bottom: 15px; }
-        .toggle-password-visibility {
-            position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-            cursor: pointer; user-select: none; width: 20px; height: 20px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'%3E%3C/path%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3C/svg%3E");
-            background-size: contain; background-repeat: no-repeat; opacity: 0.6; transition: opacity 0.2s;
-        }
-        .toggle-password-visibility.visible {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'%3E%3C/path%3E%3Cline x1='1' y1='1' x2='23' y2='23'%3E%3C/line%3E%3C/svg%3E");
-        }
-        #password-strength-text, #confirm-password-strength-text {
-            position: absolute; right: 40px; top: 50%; transform: translateY(-50%);
-            font-size: 0.85rem; font-weight: 600; padding: 2px 8px; border-radius: 4px;
-            min-width: 75px; text-align: center;
-        }
-        .strength-very-weak, .strength-weak { color: #c62828; }
-        .strength-medium { color: #f57f17; }
-        .strength-strong { color: #2e7d32; }
-        .password-match { color: #2e7d32; }
-        .password-mismatch { color: #c62828; }
-        .validation-errors {
-            display: none; background-color: #ffebee; color: #c62828;
-            border: 1px solid #ffcdd2; border-radius: 6px;
-            padding: 10px 15px; margin-top: -10px; margin-bottom: 15px; font-size: 0.9rem; text-align: left;
-        }
-        .validation-errors ul { margin: 5px 0 0 0; padding-left: 20px; }
-        /* Hide browser's default password reveal icon */
-        input[type="password"]::-ms-reveal,
-        input[type="password"]::-webkit-password-reveal-button {
-            display: none;
-        }
-        /* Style for the error toast notification */
-        .toast.error {
-            background-color: #c62828; /* Red for errors */
-        }
-    </style>
+    <!-- Reset password and password-input styles moved to css/extracted_styles.css -->
 </head>
-<body>
+<body class="login-body">
     <div class="login-container">
         <img src="images/logo.png" alt="Bigger Brew Logo">
         <h1>Create New Password</h1>
@@ -142,10 +95,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <!-- Generic Confirmation Modal -->
 <div class="modal" id="confirmModal">
-    <div class="modal-content" style="max-width: 450px; text-align: center;">
+    <div class="modal-content max-width-450 text-center">
         <span class="close" id="closeConfirmModal">&times;</span>
         <h2 id="confirmTitle">Please Confirm</h2>
-        <p id="confirmMessage" style="margin: 20px 0; font-size: 1.1rem;"></p>
+        <p id="confirmMessage" class="confirm-message"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

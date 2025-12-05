@@ -118,24 +118,10 @@ $inventory_forecast_result = generate_forecast($conn, 'inventory', $selected_inv
     <title>Demand Forecasting</title>
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns/dist/chartjs-adapter-date-fns.bundle.min.js"></script>
-    <style>
-        .forecast-warning {
-            background-color: #fffde7;
-            color: #f57f17;
-            padding: 10px 15px;
-            border-radius: 6px;
-            margin-top: 10px;
-            border: 1px solid #fff9c4;
-        }
-        body.dark-mode .forecast-warning {
-            background-color: #42341a;
-            color: #ffe082;
-            border-color: #5a4822;
-        }
-    </style>
 </head>
 <body>
 <div class="container">
@@ -160,7 +146,7 @@ $inventory_forecast_result = generate_forecast($conn, 'inventory', $selected_inv
         <header>
             <div class="top-row">
                 <h1>Demand Forecasting</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                 </div>
             </div>
         </header>
@@ -180,11 +166,11 @@ $inventory_forecast_result = generate_forecast($conn, 'inventory', $selected_inv
             </form>
         </div>
 
-        <div class="content-wrapper" style="flex-grow: 1; overflow-y: auto; padding: 2px;">
+        <div class="content-wrapper content-scroll">
             <section class="box">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                <div class="chart-header">
                     <h2>Sales Forecast (Menu Items)</h2>
-                    <form method="GET" action="admin_forecasting.php" class="filter-form" style="gap: 8px;">
+                    <form method="GET" action="admin_forecasting.php" class="filter-form flex-gap-center">
                         <input type="hidden" name="forecast_period" value="<?= $forecast_period_days ?>">
                         <input type="hidden" name="inventory_category" value="<?= htmlspecialchars($selected_inventory_category) ?>">
                         <select name="sales_category" onchange="this.form.submit()">
@@ -201,15 +187,14 @@ $inventory_forecast_result = generate_forecast($conn, 'inventory', $selected_inv
                 <?php if ($sales_forecast_result['warning']): ?>
                     <div class="forecast-warning"><?= $sales_forecast_result['warning'] ?></div>
                 <?php endif; ?>
-                <div class="chart-container" style="margin-top: 20px; height: 350px; cursor: pointer;">
+                <div class="chart-container chart-container-medium">
                     <canvas id="salesForecastChart"></canvas>
                 </div>
             </section>
-
-            <section class="box" style="margin-top: 24px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+            <section class="box mt-24">
+                <div class="chart-header">
                     <h2>Inventory Consumption Forecast</h2>
-                     <form method="GET" action="admin_forecasting.php" class="filter-form" style="gap: 8px;">
+                     <form method="GET" action="admin_forecasting.php" class="filter-form flex-gap-center">
                         <input type="hidden" name="forecast_period" value="<?= $forecast_period_days ?>">
                         <input type="hidden" name="sales_category" value="<?= htmlspecialchars($selected_sales_category) ?>">
                         <select name="inventory_category" onchange="this.form.submit()">
@@ -226,7 +211,7 @@ $inventory_forecast_result = generate_forecast($conn, 'inventory', $selected_inv
                 <?php if ($inventory_forecast_result['warning']): ?>
                     <div class="forecast-warning"><?= $inventory_forecast_result['warning'] ?></div>
                 <?php endif; ?>
-                <div class="chart-container" style="margin-top: 20px; height: 350px; cursor: pointer;">
+                <div class="chart-container chart-container-medium">
                     <canvas id="inventoryForecastChart"></canvas>
                 </div>
             </section>
@@ -236,10 +221,10 @@ $inventory_forecast_result = generate_forecast($conn, 'inventory', $selected_inv
 
 <!-- Chart Modal -->
 <div class="modal" id="chartModal">
-    <div class="modal-content" id="chartModalContent" style="max-width: 80%; width: 900px;">
+    <div class="modal-content modal-content-wide" id="chartModalContent">
         <span class="close" id="closeChartModal">&times;</span>
         <h2 id="chartModalTitle">Chart View</h2>
-        <div class="chart-container" style="height: 70vh;">
+        <div class="chart-container chart-container-large">
             <canvas id="modalChartCanvas"></canvas>
         </div>
     </div>
@@ -250,7 +235,7 @@ $inventory_forecast_result = generate_forecast($conn, 'inventory', $selected_inv
     <div class="modal-content">
         <span class="close" id="closeConfirmModal">&times;</span>
         <h2>Please Confirm</h2>
-        <p id="confirmMessage" style="text-align: center; margin: 20px 0;"></p>
+    <p id="confirmMessage" class="text-center confirm-message"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

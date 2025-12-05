@@ -210,92 +210,8 @@ foreach ($hourly_waste_data as $row) { $chart_hourly_data[(int)$row['hour']]['wa
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .low-stock-alert {
-            background-color: #ffebee !important; /* light red */
-            color: #c62828; /* dark red */
-            font-weight: bold;
-        }
-        .medium-stock-alert {
-            background-color: #fffde7 !important; /* light yellow */
-            color: #f57f17; /* dark yellow/amber */
-        }
-        /* --- Notification Styles --- */
-        .notification-wrapper { position: relative; }
-        .notification-bell { cursor: pointer; position: relative; }
-        .notification-bell svg { width: 24px; height: 24px; fill: var(--subtext); }
-        .notification-bell:hover svg { fill: var(--text); }
-        .notification-count {
-            position: absolute;
-            top: -5px;
-            right: -8px;
-            background-color: #c62828;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--panel);
-        }
-        .notification-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 320px;
-            background-color: var(--panel);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-radius: 8px;
-            z-index: 1001;
-            overflow: hidden;
-        }
-        .notification-header { padding: 12px 16px; border-bottom: 1px solid var(--muted); }
-        .notification-header h3 { margin: 0; font-size: 1rem; }
-        .notification-body { max-height: 300px; overflow-y: auto; }
-        .notification-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--muted);
-            text-decoration: none;
-            color: var(--text);
-            transition: background-color 0.2s;
-        }
-        .notification-item:last-child { border-bottom: none; }
-        .notification-item:hover { background-color: var(--muted); }
-        .notification-icon {
-            flex-shrink: 0;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-        }
-        .notification-icon.delivery { background-color: #e0f2f1; }
-        .notification-icon.delivery svg { fill: #00796b; }
-        .notification-icon.stock { background-color: #ffebee; }
-        .notification-icon svg { width: 18px; height: 18px; fill: #c62828; }
-        .notification-content ul { font-size: 0.85rem; color: var(--subtext); list-style-position: inside; padding-left: 5px; margin-top: 5px; }
-        .notification-content { font-size: 0.9rem; line-height: 1.4; }
-        .notification-content strong { color: var(--accent); }
-
-        /* Show/Hide animation */
-        .notification-dropdown.show {
-            display: block;
-            animation: fadeIn 0.2s ease-out;
-        }
-        @keyframes fadeIn { 
-            from { opacity: 0; transform: translateY(-10px); } 
-            to { opacity: 1; transform: translateY(0); } 
-        }
-    </style>
 </head>
 <body>
     <div class="container">
@@ -317,7 +233,7 @@ foreach ($hourly_waste_data as $row) { $chart_hourly_data[(int)$row['hour']]['wa
         <main class="main">
             <header>
                 <h1>Dashboard</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                     <div class="notification-wrapper">
                         <div class="notification-bell" id="notificationBell">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29V4A2,2 0 0,1 12,2A2,2 0 0,1 14,4V4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21H14Z"/></svg>
@@ -350,7 +266,7 @@ foreach ($hourly_waste_data as $row) { $chart_hourly_data[(int)$row['hour']]['wa
                 </div>
             </header>
 
-            <div class="content-wrapper" style="flex-grow: 1; overflow-y: auto; padding: 2px;">
+            <div class="content-wrapper content-scroll">
 
             <div class="filter-bar">
                 <form action="staff_dashboard.php" method="GET" class="filter-form">
@@ -363,7 +279,7 @@ foreach ($hourly_waste_data as $row) { $chart_hourly_data[(int)$row['hour']]['wa
                         <option value="ASC" <?= $sort_order == 'ASC' ? 'selected' : '' ?>>Ascending</option>
                         <option value="DESC" <?= $sort_order == 'DESC' ? 'selected' : '' ?>>Descending</option>
                     </select>
-                    <select name="filter_category" id="categoryFilterSelect" style="display: none;">
+                    <select name="filter_category" id="categoryFilterSelect" class="hidden">
                         <option value="">All Categories</option>
                         <option value="Basic Ingredient" <?= $filter_category == 'Basic Ingredient' ? 'selected' : '' ?>>Basic Ingredient</option>
                         <option value="Cups and Lids" <?= $filter_category == 'Cups and Lids' ? 'selected' : '' ?>>Cups and Lids</option>
@@ -390,10 +306,10 @@ foreach ($hourly_waste_data as $row) { $chart_hourly_data[(int)$row['hour']]['wa
 
             <section class="box">
                 <h2>Inventory Status</h2>
-                <p style="font-size: 0.9rem; color: var(--subtext); margin-bottom: 15px;">
+                <p class="muted-note">
                     Default view shows items with low or medium stock. Use the filter bar to see all items.
                 </p>
-                <div class="table-container" style="max-height: 350px;">
+                <div class="table-container table-scroll">
                     <table>
                         <thead>
                             <tr>
@@ -451,10 +367,10 @@ foreach ($hourly_waste_data as $row) { $chart_hourly_data[(int)$row['hour']]['wa
 
 <!-- Chart Modal -->
 <div class="modal" id="chartModal">
-    <div class="modal-content" id="chartModalContent" style="max-width: 80%; width: 900px;">
+    <div class="modal-content modal-content-wide" id="chartModalContent">
         <span class="close" id="closeChartModal">&times;</span>
         <h2 id="chartModalTitle">Chart View</h2>
-        <div class="chart-container" style="height: 70vh;">
+        <div class="chart-container chart-container-large">
             <canvas id="modalChartCanvas"></canvas>
         </div>
     </div>
@@ -466,7 +382,7 @@ foreach ($hourly_waste_data as $row) { $chart_hourly_data[(int)$row['hour']]['wa
     <div class="modal-content">
         <span class="close" id="closeConfirmModal">&times;</span>
         <h2>Please Confirm</h2>
-        <p id="confirmMessage" style="text-align: center; margin: 20px 0;"></p>
+    <p id="confirmMessage" class="text-center"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

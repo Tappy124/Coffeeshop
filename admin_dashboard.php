@@ -171,147 +171,8 @@ $notification_count = count($notifications);
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
-    <style>
-        /* --- Calendar Styles --- */
-        .calendar { display: grid; grid-template-columns: repeat(7, 1fr); gap: 5px; }
-        .calendar-header, .calendar-day { text-align: center; padding: 8px; border-radius: 4px; }
-        .calendar-header { font-weight: bold; color: var(--subtext); font-size: 0.9em; }
-        .calendar-day { background-color: var(--muted); }
-        .calendar-day.other-month { color: var(--subtext); opacity: 0.4; background: none; }
-        .calendar-day.today { background-color: var(--accent); color: white; font-weight: bold; }
-        .calendar-day.has-delivery { background-color: #c62828; color: white; cursor: pointer; position: relative; font-weight: bold; } /* Red for upcoming */
-        .calendar-day.has-delivery.received { background-color: #28a745; } /* Green for received */
-        .calendar-day.has-delivery::after { content: ''; position: absolute; top: 4px; right: 4px; width: 6px; height: 6px; background: white; border-radius: 50%; }
-        .calendar-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .calendar-nav button {
-            background: none;
-            border: none;
-            cursor: pointer;
-            font-size: 1.5em;
-            color: var(--subtext);
-        }
-        .calendar-nav button:hover { color: var(--text); }
-        .calendar-title { font-weight: bold; font-size: 1.1em; color: var(--accent); }
-        .delivery-tooltip { display: none; position: absolute; background: var(--panel); color: var(--text); border: 1px solid #ddd; padding: 8px; border-radius: 6px; z-index: 10; font-size: 0.85em; box-shadow: 0 2px 5px rgba(0,0,0,0.1); }
-        .has-delivery:hover .delivery-tooltip { display: block; }
-
-        /* --- Filter Buttons --- */
-        .chart-filters { display: flex; gap: 8px; margin-bottom: 15px; justify-content: flex-end; }
-        .chart-filters .btn {
-            background: var(--muted);
-            color: var(--subtext);
-            border: 1px solid transparent;
-            padding: 6px 12px;
-            font-size: 0.9rem;
-            text-decoration: none;
-        }
-        .chart-filters .btn.active, .chart-filters .btn:hover {
-            background: var(--accent);
-            color: white;
-            border-color: var(--accent);
-        }
-        body.dark-mode .chart-filters .btn {
-            background: #2a3b4d;
-            border-color: #444;
-        }
-        body.dark-mode .chart-filters .btn.active, body.dark-mode .chart-filters .btn:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-        .chart-box h3 {
-            margin-bottom: 0; /* Adjust for filter buttons */
-        }
-
-        /* --- Delivery Details Modal Styling --- */
-        #deliveryDetailsContent h3 {
-            color: var(--accent);
-            margin-top: 15px;
-            margin-bottom: 5px;
-            font-size: 1.2em;
-        }
-        #deliveryDetailsContent p.contact-info {
-            font-size: 0.85em;
-            color: var(--subtext);
-            margin-bottom: 10px;
-        }
-        #deliveryDetailsContent ul { list-style-type: disc; padding-left: 20px; margin-bottom: 15px; }
-        #deliveryDetailsContent ul li { margin-bottom: 3px; }
-        #deliveryDetailsContent hr { border: 0; border-top: 1px solid var(--muted); margin: 15px 0; }
-    </style>
-    <style>
-        /* --- Notification Styles --- */
-        .notification-wrapper { position: relative; }
-        .notification-bell { cursor: pointer; position: relative; }
-        .notification-bell svg { width: 24px; height: 24px; fill: var(--subtext); }
-        .notification-bell:hover svg { fill: var(--text); }
-        .notification-count {
-            position: absolute;
-            top: -5px;
-            right: -8px;
-            background-color: #c62828;
-            color: white;
-            border-radius: 50%;
-            width: 18px;
-            height: 18px;
-            font-size: 11px;
-            font-weight: bold;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--panel);
-        }
-        .notification-dropdown {
-            display: none;
-            position: absolute;
-            top: 100%;
-            right: 0;
-            width: 320px;
-            background-color: var(--panel);
-            box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-            border-radius: 8px;
-            z-index: 1001;
-            overflow: hidden;
-        }
-        .notification-header { padding: 12px 16px; border-bottom: 1px solid var(--muted); }
-        .notification-header h3 { margin: 0; font-size: 1rem; }
-        .notification-body { max-height: 300px; overflow-y: auto; }
-        .notification-item {
-            display: flex;
-            align-items: center;
-            padding: 12px 16px;
-            border-bottom: 1px solid var(--muted);
-            text-decoration: none;
-            color: var(--text);
-            transition: background-color 0.2s;
-        }
-        .notification-item:last-child { border-bottom: none; }
-        .notification-item:hover { background-color: var(--muted); }
-        .notification-icon {
-            flex-shrink: 0;
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin-right: 12px;
-        }
-        .notification-icon.stock { background-color: #ffebee; }
-        .notification-icon.delivery { background-color: #e0f2f1; }
-        .notification-icon svg { width: 18px; height: 18px; }
-        .notification-icon.stock svg { fill: #c62828; }
-        .notification-icon.delivery svg { fill: #00796b; }
-        .notification-content { font-size: 0.9rem; line-height: 1.4; }
-        .notification-content ul { font-size: 0.85rem; color: var(--subtext); list-style-position: inside; padding-left: 5px; margin-top: 5px; }
-        .notification-content strong { color: var(--accent); }
-
-        /* Show/Hide animation */
-        .notification-dropdown.show {
-            display: block;
-            animation: fadeIn 0.2s ease-out;
-        }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
-    </style>
+    <link rel="stylesheet" href="css/extracted_styles.css">
+    <!-- calendar/notification styles moved to css/extracted_styles.css -->
 </head>
 <body>
     <div class="container">
@@ -337,7 +198,7 @@ $notification_count = count($notifications);
         <main class="main">
             <header>
                 <h1>Dashboard</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                     <div class="notification-wrapper">
                         <div class="notification-bell" id="notificationBell">
                             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M21,19V20H3V19L5,17V11C5,7.9 7.03,5.17 10,4.29V4A2,2 0 0,1 12,2A2,2 0 0,1 14,4V4.29C16.97,5.17 19,7.9 19,11V17L21,19M14,21A2,2 0 0,1 12,23A2,2 0 0,1 10,21H14Z"/></svg>
@@ -370,7 +231,7 @@ $notification_count = count($notifications);
                 </div>
             </header>
 
-            <div class="content-wrapper" style="flex-grow: 1; overflow-y: auto; padding: 2px;">
+            <div class="content-wrapper content-scroll">
 
             <section class="cards" aria-label="summary cards">
                 <div class="card" >
@@ -385,7 +246,7 @@ $notification_count = count($notifications);
 
             <section class="charts">
                 <div class="chart-box">
-                    <div style="display:flex; justify-content: space-between; align-items: center;">
+                    <div class="chart-header">
                         <h3>Sales vs. Waste</h3>
                         <div class="chart-filters">
                             <a href="?range=daily" class="btn <?= $time_range == 'daily' ? 'active' : '' ?>">Daily</a>
@@ -424,10 +285,10 @@ $notification_count = count($notifications);
 
 <!-- Chart Modal -->
 <div class="modal" id="chartModal">
-    <div class="modal-content" id="chartModalContent" style="max-width: 80%; width: 900px;">
+    <div class="modal-content modal-content-wide" id="chartModalContent">
         <span class="close" id="closeChartModal">&times;</span>
         <h2 id="chartModalTitle">Chart View</h2>
-        <div class="chart-container" style="height: 70vh;">
+        <div class="chart-container chart-container-large">
             <canvas id="modalChartCanvas"></canvas>
         </div>
     </div>
@@ -441,7 +302,7 @@ $notification_count = count($notifications);
         <div id="deliveryDetailsContent">
             <!-- Delivery details will be loaded here -->
         </div>
-        <div class="form-actions" style="margin-top: 20px;">
+        <div class="form-actions mt-15">
             <button type="button" class="cancel-btn" id="closeDeliveryDetailsBtn">Close</button>
         </div>
     </div>
@@ -452,7 +313,7 @@ $notification_count = count($notifications);
     <div class="modal-content">
         <span class="close" id="closeConfirmModal">&times;</span>
         <h2>Please Confirm</h2>
-        <p id="confirmMessage" style="text-align: center; margin: 20px 0;"></p>
+    <p id="confirmMessage" class="text-center confirm-message"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

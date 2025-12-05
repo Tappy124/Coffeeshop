@@ -85,139 +85,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Login - Brewventory</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <style>
-        body {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: var(--bg);
-        }
-        .login-container {
-            width: 100%;
-            max-width: 400px;
-            padding: 40px;
-            background-color: var(--panel);
-            border-radius: 12px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
-            text-align: center;
-        }
-        .login-container img {
-            width: 120px;
-            height: 120px;
-            margin-bottom: 20px;
-        }
-        .login-container h1 {
-            color: var(--accent);
-            margin-bottom: 25px;
-        }
-        .login-container input {
-            width: 100%;
-            padding: 12px;
-            margin-bottom: 15px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            font-size: 1rem;
-        }
-        .login-container button {
-            width: 100%;
-            padding: 12px;
-            border: none;
-            border-radius: 6px;
-            background-color: var(--accent);
-            color: white;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: opacity 0.2s;
-        }
-        .login-container button:hover {
-            opacity: 0.9;
-        }
-        .error-message {
-            color: #c62828;
-            background-color: #ffebee;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid #ffcdd2;
-        }
-        /*.success-message {
-            color: #00796b;
-            background-color: #e0f2f1;
-            padding: 10px;
-            border-radius: 6px;
-            margin-bottom: 15px;
-            border: 1px solid #ffcdd2;
-        } */
-        /* Style for the error toast notification */
-        .toast.error {
-            background-color: #c62828; /* Red for errors */
-        }
-
-        /* --- Password Visibility Toggle Styles --- */
-        .password-input-container {
-            position: relative;
-            margin-bottom: 15px;
-        }
-        .password-input-container input {
-            margin-bottom: 0;
-            padding-right: 45px; /* Make space for the icon */
-        }
-        .toggle-password-visibility {
-            position: absolute;
-            right: 12px;
-            top: 50%;
-            transform: translateY(-50%);
-            cursor: pointer;
-            user-select: none;
-            width: 20px;
-            height: 20px;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z'%3E%3C/path%3E%3Ccircle cx='12' cy='12' r='3'%3E%3C/circle%3E%3C/svg%3E");
-            background-size: contain;
-            background-repeat: no-repeat;
-            opacity: 0.6;
-            transition: opacity 0.2s;
-        }
-        .toggle-password-visibility:hover {
-            opacity: 1;
-        }
-        .toggle-password-visibility.visible {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%23666' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24'%3E%3C/path%3E%3Cline x1='1' y1='1' x2='23' y2='23'%3E%3C/line%3E%3C/svg%3E");
-        }
-        /* Hide browser's default password reveal icon */
-        input[type="password"]::-ms-reveal,
-        input[type="password"]::-webkit-password-reveal-button {
-            display: none;
-        }
-
-        /* --- Loader Styles --- */
-        .loader-overlay {
-            display: none; /* Hidden by default */
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.7);
-            backdrop-filter: blur(4px);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-        .loader-spinner {
-            width: 50px;
-            height: 50px;
-            border: 5px solid #f3f3f3; /* Light grey */
-            border-top: 5px solid var(--accent); /* Theme color */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-        }
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
-    </style>
+    <link rel="stylesheet" href="css/extracted_styles.css">
 </head>
-<body>
+<body class="login-body">
     <div class="login-container">
         <img src="images/logo.png" alt="Bigger Brew Logo">
         <h1>Bigger Brew Inventory</h1>
@@ -229,8 +101,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
             <button type="submit" id="loginButton">Login</button>
         </form>
-        <div style="text-align: right; margin-top: 15px;">
-            <a href="forgot_password.php" style="color: var(--subtext); font-size: 0.9rem; text-decoration: none;">Forgot Password?</a>
+        <div class="text-right mt-15">
+            <a href="forgot_password.php" class="muted-link">Forgot Password?</a>
         </div>
     </div>
 

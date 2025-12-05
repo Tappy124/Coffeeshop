@@ -201,6 +201,7 @@ $inventory_products = $inventory_products_result->fetch_all(MYSQLI_ASSOC);
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     
 </head>
 <body>
@@ -229,7 +230,7 @@ $inventory_products = $inventory_products_result->fetch_all(MYSQLI_ASSOC);
         <header>
             <div class="top-row">
                 <h1>Menu Product Management</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                     <button class="btn" id="openAddProduct">+ Add Menu Product</button>
                 </div>
             </div>
@@ -247,7 +248,7 @@ $inventory_products = $inventory_products_result->fetch_all(MYSQLI_ASSOC);
                     <option value="ASC" <?= $sort_order == 'ASC' ? 'selected' : '' ?>>Ascending</option>
                     <option value="DESC" <?= $sort_order == 'DESC' ? 'selected' : '' ?>>Descending</option>
                 </select>
-                <select name="filter_category" id="categoryFilterSelect" style="display: none;">
+                <select name="filter_category" id="categoryFilterSelect" class="hidden">
                     <option value="">All Categories</option>
                     <?php foreach ($drink_categories as $cat): ?>
                         <option value="<?= htmlspecialchars($cat['category']) ?>" <?= $filter_category == $cat['category'] ? 'selected' : '' ?>>
@@ -304,7 +305,7 @@ $inventory_products = $inventory_products_result->fetch_all(MYSQLI_ASSOC);
                                         data-price_1L="<?= htmlspecialchars($row['price_large'] ?? '') ?>">
                                         Edit
                                     </button>
-                                    <form method="POST" action="delete_product.php?id=<?= htmlspecialchars($row['product_id']) ?>&type=menu" style="display:inline;">
+                                    <form method="POST" action="delete_product.php?id=<?= htmlspecialchars($row['product_id']) ?>&type=menu" class="inline">
                                         <!-- The form action will be handled by JS, but this is a good fallback -->
                                         <input type="hidden" name="delete_product" value="1">
                                         <button type="button" class="action-btn delete-btn">Delete</button>
@@ -341,7 +342,7 @@ $inventory_products = $inventory_products_result->fetch_all(MYSQLI_ASSOC);
                 <!-- Allow adding a new category -->
                 <option value="new_category">-- Add New Category --</option>
             </select>
-            <input type="text" name="new_category" id="new_category_input" style="display:none; margin-top: 8px;" placeholder="Enter new category name">
+            <input type="text" name="new_category" id="new_category_input" class="hidden mt-15" placeholder="Enter new category name">
  
             <label>Price (16oz)</label>
             <input type="number" step="0.01" name="price_16oz" placeholder="e.g., 150.50">
@@ -352,34 +353,34 @@ $inventory_products = $inventory_products_result->fetch_all(MYSQLI_ASSOC);
             <label>Price (1L)</label>
             <input type="number" step="0.01" name="price_1L" placeholder="e.g., 250.00">
 
-            <p style="font-size: 0.8rem; color: var(--subtext); margin-top: -5px; margin-bottom: 15px;">At least one price is required. Leave blank if a size is not available.</p>
+            <p class="muted-note">At least one price is required. Leave blank if a size is not available.</p>
             <hr class="recipe-divider">
             <h3>Recipe Ingredients</h3>
-            <p style="font-size: 0.8rem; color: var(--subtext); margin-top: -5px; margin-bottom: 15px;">Add the ingredients from your inventory required to make this drink for each size.</p>
+            <p class="muted-note">Add the ingredients from your inventory required to make this drink for each size.</p>
 
             <!-- Recipe for 16oz -->
-            <div class="recipe-section" id="recipe_16oz" style="display:none;">
+            <div class="recipe-section hidden" id="recipe_16oz">
                 <h4>Recipe for 16oz</h4>
                 <div class="ingredient-list"></div>
                 <button type="button" class="btn-add-ingredient" data-size="16oz">+ Add Ingredient</button>
             </div>
 
             <!-- Recipe for 22oz -->
-            <div class="recipe-section" id="recipe_22oz" style="display:none;">
+            <div class="recipe-section hidden" id="recipe_22oz">
                 <h4>Recipe for 22oz</h4>
                 <div class="ingredient-list"></div>
                 <button type="button" class="btn-add-ingredient" data-size="22oz">+ Add Ingredient</button>
             </div>
 
             <!-- Recipe for 1L -->
-            <div class="recipe-section" id="recipe_1L" style="display:none;">
+            <div class="recipe-section hidden" id="recipe_1L">
                 <h4>Recipe for 1L</h4>
                 <div class="ingredient-list"></div>
                 <button type="button" class="btn-add-ingredient" data-size="1L">+ Add Ingredient</button>
             </div>
 
             <!-- Recipe for 12oz (Hot Drinks) -->
-            <div class="recipe-section" id="recipe_12oz" style="display:none;">
+            <div class="recipe-section hidden" id="recipe_12oz">
                 <h4>Recipe for 12oz (Hot Drink)</h4>
                 <div class="ingredient-list"></div>
                 <button type="button" class="btn-add-ingredient" data-size="12oz">+ Add Ingredient</button>
@@ -412,7 +413,7 @@ $inventory_products = $inventory_products_result->fetch_all(MYSQLI_ASSOC);
                 <?php endforeach; ?>
                  <option value="new_category">-- Add New Category --</option>
             </select>
-            <input type="text" name="edit_new_category" id="edit_new_category_input" style="display:none; margin-top: 8px;" placeholder="Enter new category name">
+            <input type="text" name="edit_new_category" id="edit_new_category_input" class="hidden mt-15" placeholder="Enter new category name">
             <label for="edit_price_16oz">Price (16oz)</label>
             <input type="number" step="0.01" name="edit_price_16oz" id="edit_price_16oz" placeholder="Leave blank if N/A">
 

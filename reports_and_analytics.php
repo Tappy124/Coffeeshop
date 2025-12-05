@@ -329,41 +329,10 @@ if ($report_type === 'overview') {
     <title>Reports & Analytics</title>
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        /* Style for the date input placeholder to match sales_and_waste.php */
-        .filter-form input[type="date"] {
-            position: relative;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            background-color: var(--bg);
-            color: var(--text);
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-        
-        /* Style the placeholder text for Webkit browsers (Chrome, Safari) */
-        .filter-form input[type="date"]::-webkit-input-placeholder { color: #777; }
-        
-        /* Style the placeholder text for Firefox */
-        .filter-form input[type="date"]:-moz-placeholder { color: #777; opacity: 1; }
-        .filter-form input[type="date"]::-moz-placeholder { color: #777; opacity: 1; }
-        
-        /* Style the placeholder text for Edge & IE */
-        .filter-form input[type="date"]:-ms-input-placeholder { color: #777; }
-        .filter-form input[type="date"]::-ms-input-placeholder { color: #777; }
-        
-        /* Show placeholder when the input is not focused and has no value */
-        .filter-form input[type="date"]:not(:focus):not([value]):not([value=""])::before {
-            content: attr(placeholder);
-            color: #777;
-        }
-        .filter-form input[type="date"]:not([value]):not([value=""]) {
-            color: #777; /* Ensure placeholder text color is applied when value is empty */
-        }
-    </style>
+    <!-- Date input and chart styles moved to css/extracted_styles.css (.filter-date-input, .chart-container-large, .chart-header) -->
 </head>
 <body>
 <div class="container">
@@ -388,7 +357,7 @@ if ($report_type === 'overview') {
         <header>
             <div class="top-row">
                 <h1>Reports & Analytics</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                 </div>
             </div>
         </header>
@@ -404,12 +373,12 @@ if ($report_type === 'overview') {
                     <option value="profitability" <?= $report_type == 'profitability' ? 'selected' : '' ?>>Profitability Analysis</option>
                 </select>
 
-                <div id="date_filter_wrapper" style="<?= $report_type === 'overview' ? 'display:none;' : '' ?>">
+                <div id="date_filter_wrapper" <?= $report_type === 'overview' ? 'class="hidden"' : '' ?>>
                     <label for="start_date">From:</label>
-                    <input type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($start_date) ?>" placeholder="From Date">
+                    <input class="filter-date-input" type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($start_date) ?>" placeholder="From Date">
 
                     <label for="end_date">To:</label>
-                    <input type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($end_date) ?>" placeholder="To Date">
+                    <input class="filter-date-input" type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($end_date) ?>" placeholder="To Date">
                 </div>
 
                 <button type="submit" class="btn">Filter</button>
@@ -501,7 +470,7 @@ if ($report_type === 'overview') {
                     </div>
                 </div>
 
-                <div class="table-container" style="max-height: 300px;">
+                <div class="table-container table-scroll">
                     <?php if (!empty($report_data)): ?>
                         <table>
                             <thead>
@@ -549,7 +518,7 @@ if ($report_type === 'overview') {
                     <?php endif; ?>
                 </div>
 
-                <div class="chart-box sortable-chart" style="margin-top: 30px; padding: 20px; border-radius: 8px;">
+                <div class="chart-box sortable-chart mt-30 box-padded">
                     <div class="chart-header">
                         <h3>Chart Visualization</h3>
                         <select class="chart-sorter" id="detailedReportSorter" data-chart-id="reportChart">
@@ -558,7 +527,7 @@ if ($report_type === 'overview') {
                         </select>
                     </div>
                     <div class="chart-container" style="height: 400px;">
-                        <canvas id="reportChart" style="<?= empty($report_data) ? 'display:none;' : '' ?>"></canvas>
+                        <canvas id="reportChart" <?= empty($report_data) ? 'class="hidden"' : '' ?>></canvas>
                     </div>
                 </div>
             </section>
@@ -593,35 +562,7 @@ if ($report_type === 'overview') {
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    // --- Add styles for the new elements ---
-    const style = document.createElement('style');
-    style.textContent = `
-        .loader-spinner {
-            width: 40px;
-            height: 40px;
-            border: 4px solid #f3f3f3; /* Light grey */
-            border-top: 4px solid var(--accent); /* Theme color */
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin: 20px auto;
-        }
-        @keyframes spin { 
-            0% { transform: rotate(0deg); } 
-            100% { transform: rotate(360deg); } 
-        }
-
-        .chart-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
-        .chart-header h3 { margin: 0; }
-        .chart-sorter {
-            padding: 5px 8px;
-            border-radius: 4px;
-            border: 1px solid #ccc;
-            background-color: #e0f7fa;
-            color: #00796b;
-            cursor: pointer;
-        }
-    `;
-    document.head.appendChild(style);
+    // Chart & loader styles moved to css/extracted_styles.css
     // Store chart instances to make them accessible for modal creation
     const chartInstances = {};
 

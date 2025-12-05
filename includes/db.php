@@ -2,7 +2,7 @@
 $host = "localhost";
 $user = "root";   // default XAMPP MySQL user
 $pass = "";       // default password in XAMPP
-$db   = "~"; // make sure this database exists in phpMyAdmin
+$db   = "coffee_shop"; // make sure this database exists in phpMyAdmin
 
 $conn = new mysqli($host, $user, $pass, $db);
 

@@ -54,26 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <title>Forgot Password - Brewventory</title>
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <style>
-        body { display: flex; justify-content: center; align-items: center; height: 100vh; background-color: var(--bg); }
-        .login-container { width: 100%; max-width: 400px; padding: 40px; background-color: var(--panel); border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); text-align: center; }
-        .login-container img { width: 120px; height: 120px; margin-bottom: 20px; }
-        .login-container h1 { color: var(--accent); margin-bottom: 10px; }
-        .login-container p { color: var(--subtext); margin-bottom: 25px; }
-        .login-container input { width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 6px; border: 1px solid #ccc; font-size: 1rem; }
-        .login-container button { width: 100%; padding: 12px; border: none; border-radius: 6px; background-color: var(--accent); color: white; font-size: 1rem; font-weight: 600; cursor: pointer; transition: opacity 0.2s; }
-        .login-container button:hover { opacity: 0.9; }
-        .login-container .back-link { display: block; margin-top: 20px; color: var(--accent); text-decoration: none; }
-        .error-message { color: #c62828; background-color: #ffebee; padding: 10px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #ffcdd2; text-align: left; }
-        .error-message code { background-color: #ffcdd2; padding: 2px 4px; border-radius: 3px; }
-        /* Style for the error toast notification */
-        .toast.error {
-            background-color: #c62828; /* Red for errors */
-        }
-    </style>
 </head>
-<body>
+<body class="login-body">
     <div class="login-container">
         <img src="images/logo.png" alt="Bigger Brew Logo">
         <h1>Forgot Password</h1>

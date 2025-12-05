@@ -523,48 +523,9 @@ $conn->close();
     <title>Sales & Waste Analytics</title>
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <style>
-        /* Style for the date input placeholder */
-        .filter-form input[type="date"] {
-            position: relative;
-            padding: 10px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            background-color: var(--bg);
-            color: var(--text);
-            font-size: 1rem;
-            transition: border-color 0.2s;
-        }
-        
-        /* Style the placeholder text for Webkit browsers (Chrome, Safari) */
-        .filter-form input[type="date"]::-webkit-input-placeholder {
-            color: #777;
-        }
-        
-        /* Style the placeholder text for Firefox */
-        .filter-form input[type="date"]:-moz-placeholder {
-            color: #777;
-            opacity: 1;
-        }
-        .filter-form input[type="date"]::-moz-placeholder {
-            color: #777;
-            opacity: 1;
-        }
-        
-        /* Style the placeholder text for Edge & IE */
-        .filter-form input[type="date"]:-ms-input-placeholder {
-            color: #777;
-        }
-        .filter-form input[type="date"]::-ms-input-placeholder {
-            color: #777;
-        }
-        
-        /* Show placeholder when the input is not focused and has no value */
-        .filter-form input[type="date"]:not(:focus):not([value]):not([value=""])::before {
-            content: attr(placeholder);
-        }
-    </style>
+    <!-- date input styles moved to css/extracted_styles.css (.filter-date-input) -->
 </head>
 <body>
 <div class="container">
@@ -589,7 +550,7 @@ $conn->close();
         <header>
             <div class="top-row">
                 <h1>Sales & Waste Analytics</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                 </div>
             </div>
         </header>
@@ -597,10 +558,10 @@ $conn->close();
         <div class="filter-bar">
             <form method="GET" action="sales_and_waste.php" class="filter-form">
                 <label for="start_date">From:</label>
-                <input type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($start_date) ?>" placeholder="From Date">
+                <input class="filter-date-input" type="date" name="start_date" id="start_date" value="<?= htmlspecialchars($start_date) ?>" placeholder="From Date">
 
                 <label for="end_date">To:</label>
-                <input type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($end_date) ?>" placeholder="To Date">
+                <input class="filter-date-input" type="date" name="end_date" id="end_date" value="<?= htmlspecialchars($end_date) ?>" placeholder="To Date">
 
                 <select name="data_type">
                     <option value="all" <?= $data_type == 'all' ? 'selected' : '' ?>>All Records</option>
@@ -662,7 +623,7 @@ $conn->close();
                                         data-quantity="<?= htmlspecialchars($sale['quantity']) ?>">
                                         Edit
                                     </button>
-                                    <form method="POST" action="sales_and_waste.php" style="display:inline;" class="delete-form">
+                                    <form method="POST" action="sales_and_waste.php" class="delete-form inline">
                                         <input type="hidden" name="delete_sale" value="1">
                                         <input type="hidden" name="delete_sale_id" value="<?= $sale['id'] ?>">
                                         <button type="button" class="action-btn delete-btn">Delete</button>
@@ -680,7 +641,7 @@ $conn->close();
         <?php endif; ?>
 
         <?php if ($data_type === 'all' || $data_type === 'waste'): ?>
-        <section class="box" style="margin-top: 24px;">
+    <section class="box mt-24">
             <h2>Waste Records</h2>
             <div class="table-container">
                 <table>
@@ -729,7 +690,7 @@ $conn->close();
                                         data-reason="<?= htmlspecialchars($log['reason']) ?>">
                                         Edit
                                     </button>
-                                    <form method="POST" action="sales_and_waste.php" style="display:inline;" class="delete-form">
+                                    <form method="POST" action="sales_and_waste.php" class="delete-form inline">
                                         <input type="hidden" name="delete_waste" value="1">
                                         <input type="hidden" name="delete_waste_id" value="<?= $log['id'] ?>">
                                         <button type="button" class="action-btn delete-btn">Delete</button>
@@ -797,9 +758,9 @@ $conn->close();
                 <?php endforeach; ?>
             </select>
             <label>Quantity Wasted</label>
-            <div style="display: flex; align-items: center; gap: 10px;">
-                <input type="number" name="edit_quantity" id="edit_waste_quantity" required min="1" style="margin-bottom: 12px;">
-                <input type="text" id="edit_waste_unit_display" readonly placeholder="Unit" style="width: 100px; text-align: center; margin-bottom: 12px;">
+            <div class="flex-gap-center">
+                <input class="mb-12" type="number" name="edit_quantity" id="edit_waste_quantity" required min="1">
+                <input class="unit-display" type="text" id="edit_waste_unit_display" readonly placeholder="Unit">
             </div>
             <label>Reason</label>
             <select name="edit_reason" id="edit_waste_reason" required>
@@ -809,7 +770,7 @@ $conn->close();
                 <option value="Error">Error</option>
                 <option value="Other">Other</option>
             </select>
-            <div id="edit_waste_size_wrapper" style="display:none;">
+            <div id="edit_waste_size_wrapper" class="hidden">
                 <label>Size</label>
                 <select name="edit_size" id="edit_waste_size" disabled>
                     <option value="16oz">16oz</option>
@@ -831,7 +792,7 @@ $conn->close();
     <div class="modal-content">
         <span class="close" id="closeConfirmModal">&times;</span>
         <h2>Please Confirm</h2>
-        <p id="confirmMessage" style="text-align: center; margin: 20px 0;"></p>
+    <p id="confirmMessage" class="text-center"></p>
         <div class="form-actions">
             <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
             <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>

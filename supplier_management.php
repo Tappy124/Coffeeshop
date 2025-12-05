@@ -272,40 +272,8 @@ function calculateTotalContentStock(int $stock, ?string $content): float {
 <title>Supplier Management</title>
 <link rel="stylesheet" href="css/style.css">
 <link rel="stylesheet" href="css/modal.css">
+<link rel="stylesheet" href="css/extracted_styles.css">
 <link rel="icon" type="image/x-icon" href="images/logo.png">
-<style>
-    .product-list { max-height: 150px; overflow-y: auto; border: 1px solid #ccc; padding: 10px; border-radius: 4px; margin-bottom: 15px; }
-    .product-list label { display: block; margin-bottom: 5px; }
-    .product-item { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
-    .product-item label { flex-grow: 1; margin-bottom: 0; }
-    .product-item input[type="number"] { width: 80px; padding: 5px; }
-    .product-item input[type="number"]:disabled { background-color: #eee; cursor: not-allowed; }
-    
-    /* --- Unreceive Button Hover Effect --- */
-    .unreceive-container {
-        position: relative;
-        display: inline-block;
-    }
-    .unreceive-container .unreceive-btn {
-        display: none;
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: #c62828; /* Red color for unreceive */
-        color: white;
-    }
-    .unreceive-container:hover .unreceive-btn {
-        display: inline-block; /* Show the unreceive button on hover */
-    }
-    .action-btn.receive-btn:hover {
-        background-color: #e67e22; /* A slightly darker shade for hover */
-        border-color: #d35400;
-    }
-
-</style>
-</style>
 </head>
 <body>
 <div class="container">
@@ -330,7 +298,7 @@ function calculateTotalContentStock(int $stock, ?string $content): float {
         <header>
             <div class="top-row">
                 <h1>Supplier Management</h1>
-                <div class="header-actions" style="display:flex; gap:10px; align-items:center;">
+                <div class="header-actions flex-gap-center">
                     <button class="btn" id="openAddSupplier">+ Add Supplier</button>
                 </div>
             </div>
@@ -392,13 +360,13 @@ function calculateTotalContentStock(int $stock, ?string $content): float {
                                     </button>
                                     <?php if (!empty($row['last_received_date']) && !empty($row['last_delivery_log_id'])): ?>
                                         <div class="unreceive-container">
-                                            <button class="action-btn" style="background-color: #28a745; color: white; border-color: #218838;">Received</button>
+                                            <button class="action-btn received">Received</button>
                                             <button class="action-btn unreceive-btn" data-id="<?= $row['id'] ?>" data-log-id="<?= $row['last_delivery_log_id'] ?>" data-company_name="<?= htmlspecialchars($row['company_name'], ENT_QUOTES) ?>">Unreceive</button>
                                         </div>
                                     <?php else: ?>
-                                        <button class="action-btn receive-btn" data-id="<?= $row['id'] ?>" data-company_name="<?= htmlspecialchars($row['company_name'], ENT_QUOTES) ?>" style="background-color: #f39c12; color: white;">Receive</button>
+                                        <button class="action-btn receive-btn" data-id="<?= $row['id'] ?>" data-company_name="<?= htmlspecialchars($row['company_name'], ENT_QUOTES) ?>">Receive</button>
                                     <?php endif; ?>
-                                    <form method="POST" action="supplier_management.php" style="display:inline;">
+                                    <form method="POST" action="supplier_management.php" class="inline">
                                         <input type="hidden" name="delete_supplier" value="1">
                                         <input type="hidden" name="delete_id" value="<?= $row['id'] ?>">
                                         <button type="button" class="action-btn delete-btn delete-confirm">Delete</button>
@@ -443,7 +411,7 @@ function calculateTotalContentStock(int $stock, ?string $content): float {
             <label>Restocking Schedule</label>
             <input type="date" name="restock_schedule" required min="<?= $today ?>">
 
-            <label style="margin-top: 15px;">Products Supplied</label>
+            <label class="mt-15">Products Supplied</label>
             <div class="product-list">
                 <?php foreach ($inventory_products as $product): ?>
                     <div class="product-item">
@@ -492,7 +460,7 @@ function calculateTotalContentStock(int $stock, ?string $content): float {
             <label>Restocking Schedule</label>
             <input type="date" name="edit_restock_schedule" id="edit_restock_schedule" required min="<?= $today ?>">
 
-            <label style="margin-top: 15px;">Products Supplied</label>
+            <label class="mt-15">Products Supplied</label>
             <div class="product-list" id="edit_product_list">
                 <?php foreach ($inventory_products as $product): ?>
                     <div class="product-item">
@@ -675,8 +643,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let message = 'Are you sure you want to add this supplier?';
         const selectedProducts = e.target.querySelectorAll('.product-checkbox:checked');
         
-        if (selectedProducts.length > 0) {
-            message += '<br><br><strong>Products to be supplied:</strong><ul style="text-align:left; margin-top:10px; padding-left: 20px;">';
+            if (selectedProducts.length > 0) {
+            message += '<br><br><strong>Products to be supplied:</strong><ul class="products-list-inline">';
             selectedProducts.forEach(checkbox => {
                 const itemDiv = checkbox.closest('.product-item');
                 const label = itemDiv.querySelector('label').textContent;
@@ -698,8 +666,8 @@ document.addEventListener("DOMContentLoaded", () => {
         let message = 'Are you sure you want to update this supplier?';
         const selectedProducts = e.target.querySelectorAll('.product-checkbox:checked');
         
-        if (selectedProducts.length > 0) {
-            message += '<br><br><strong>New list of supplied products:</strong><ul style="text-align:left; margin-top:10px; padding-left: 20px;">';
+            if (selectedProducts.length > 0) {
+            message += '<br><br><strong>New list of supplied products:</strong><ul class="products-list-inline">';
             selectedProducts.forEach(checkbox => {
                 const itemDiv = checkbox.closest('.product-item');
                 const label = itemDiv.querySelector('label').textContent;
