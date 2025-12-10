@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/extracted_styles.css">
     <link rel="icon" type="image/x-icon" href="images/logo.png">
-    <!-- page-specific CSS moved to css/extracted_styles.css -->
+
 </head>
 <body class="verify-otp-body">
     <div class="verify-otp-container">
@@ -52,7 +52,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <!-- Generic Confirmation Modal -->
+   
     <div class="modal" id="confirmModal">
         <div class="modal-content max-width-450 text-center">
             <span class="close" id="closeConfirmModal">&times;</span>
@@ -65,22 +65,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
-    <!-- Toast Message -->
+ 
     <div id="toast" class="toast"></div>
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     const confirmModal = document.getElementById('confirmModal');
 
-    // --- Toast Message for Errors ---
     const errorMessage = <?= json_encode($error_message) ?>;
     const toast = document.getElementById("toast");
 
     if (errorMessage) {
         toast.textContent = errorMessage;
-        toast.classList.add("show", "error"); // Add 'error' class for red background
-
-        // Hide the toast after 30 seconds
+        toast.classList.add("show", "error"); 
+        
         setTimeout(() => {
             toast.classList.remove("show", "error");
         }, 30000); // 30000 milliseconds = 30 seconds

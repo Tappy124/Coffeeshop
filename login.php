@@ -51,6 +51,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             } elseif ($user['role'] === 'Staff') {
                 header("Location: staff_dashboard.php");
                 exit;
+            } elseif ($user['role'] === 'Customer') {
+                header("Location: index.php");
+                exit;
             }
         } else {
             // Handle failed login attempt
@@ -103,6 +106,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </form>
         <div class="text-right mt-15">
             <a href="forgot_password.php" class="muted-link">Forgot Password?</a>
+        </div>
+        <div class="text-center mt-15">
+            <a href="register.php" class="muted-link">Don't have an account? Register here</a>
         </div>
     </div>
 
