@@ -71,21 +71,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
             }
 
             // Insert into sales table for each cart item
-            $stmt = $conn->prepare("INSERT INTO sales (product_id, size, quantity, price, total_amount, sale_date, customer_name, customer_contact, order_notes) VALUES (?, ?, ?, ?, ?, NOW(), ?, ?, ?)");
+            // Note: sales table stores product_id, size, quantity, total_amount, sale_date, staff_id
+            $stmt = $conn->prepare("INSERT INTO sales (product_id, size, quantity, total_amount, sale_date) VALUES (?, ?, ?, ?, NOW())");
+            
+            if (!$stmt) {
+                throw new Exception("Prepare failed: " . $conn->error);
+            }
             
             foreach ($_SESSION['cart'] as $item) {
                 $item_total = $item['price'] * $item['quantity'];
-                $stmt->bind_param("ssiddss", 
+                $stmt->bind_param("ssid", 
                     $item['product_id'], 
                     $item['size'], 
                     $item['quantity'], 
-                    $item['price'], 
-                    $item_total,
-                    $customer_name,
-                    $customer_contact,
-                    $order_notes
+                    $item_total
                 );
-                $stmt->execute();
+                
+                if (!$stmt->execute()) {
+                    throw new Exception("Execute failed: " . $stmt->error);
+                }
             }
             $stmt->close();
 
@@ -99,7 +103,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['place_order'])) {
             exit;
         } catch (Exception $e) {
             $conn->rollback();
-            $error_message = "Error placing order. Please try again.";
+            $error_message = "Error placing order: " . htmlspecialchars($e->getMessage());
         }
     } else {
         $error_message = "Please provide your name and add items to cart.";
@@ -184,15 +188,6 @@ foreach ($_SESSION['cart'] as $item) {
         </div>
     </header>
 
-    <!-- Hero Section -->
-    <section class="hero">
-        <div class="hero-content">
-            <h2>Welcome to Bigger Brew</h2>
-            <p>Freshly brewed coffee and delicious drinks, made just for you</p>
-            <a href="#menu" class="btn btn-primary btn-large">Order Now</a>
-        </div>
-    </section>
-
     <!-- Order Success Message -->
     <?php if (isset($_SESSION['order_success'])): ?>
         <div class="success-banner" id="order-success">
@@ -211,123 +206,150 @@ foreach ($_SESSION['cart'] as $item) {
         </div>
     <?php endif; ?>
 
-    <!-- Menu Section -->
-    <section class="menu-section" id="menu">
-        <div class="container">
-            <h2 class="section-title">Our Menu</h2>
+    <!-- Main Layout Container -->
+    <div class="main-layout">
+        <!-- Sidebar Menu -->
+        <aside class="sidebar-menu">
+            <div class="search-section">
+                <input type="text" id="searchInput" placeholder="Find Product" class="search-input">
+                <button class="search-btn">🔍</button>
+            </div>
 
-            <!-- Filter Bar -->
-            <div class="menu-filters">
-                <form method="GET" action="index.php#menu" class="filter-form">
-                    <input type="text" name="search" placeholder="Search drinks..." value="<?= htmlspecialchars($search) ?>" class="search-input">
-                    <select name="category" class="category-select" onchange="this.form.submit()">
-                        <option value="">All Categories</option>
-                        <?php foreach ($categories as $cat): ?>
-                            <option value="<?= htmlspecialchars($cat['category']) ?>" <?= $filter_category == $cat['category'] ? 'selected' : '' ?>>
-                                <?= htmlspecialchars($cat['category']) ?>
-                            </option>
+            <h3 class="menu-title">MENU</h3>
+            <nav class="category-menu">
+                <a href="index.php" class="category-item <?= empty($filter_category) ? 'active' : '' ?>">
+                    All Categories
+                </a>
+                <?php foreach ($categories as $cat): ?>
+                    <a href="?category=<?= urlencode($cat['category']) ?>" class="category-item <?= $filter_category == $cat['category'] ? 'active' : '' ?>">
+                        <?= htmlspecialchars($cat['category']) ?>
+                    </a>
+                <?php endforeach; ?>
+            </nav>
+
+            <div class="special-offers">
+                <div class="special-icon">🔔</div>
+                <h4>Special Offers</h4>
+                <p>Check back for exciting deals</p>
+            </div>
+        </aside>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Featured/Menu Section -->
+            <section class="menu-section" id="menu">
+                <div class="section-header">
+                    <h2 class="section-title">★ Featured Products</h2>
+                </div>
+
+                <!-- Menu Items Grid -->
+                <div class="menu-grid">
+                    <?php if (empty($menu_items)): ?>
+                        <p class="no-items">No items found.</p>
+                    <?php else: ?>
+                        <?php foreach ($menu_items as $item): ?>
+                            <div class="menu-item">
+                                <div class="item-badge">★ NEW</div>
+                                <div class="item-header">
+                                    <h4><?= htmlspecialchars($item['product_name']) ?></h4>
+                                    <p class="item-description"><?= htmlspecialchars($item['category']) ?></p>
+                                </div>
+                                <div class="item-prices">
+                                    <?php if ($item['price_small']): ?>
+                                        <div class="price-option">
+                                            <span class="size-label">16oz</span>
+                                            <span class="price">₱<?= number_format($item['price_small'], 2) ?></span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if ($item['price_medium']): ?>
+                                        <div class="price-option">
+                                            <span class="size-label">22oz</span>
+                                            <span class="price">₱<?= number_format($item['price_medium'], 2) ?></span>
+                                        </div>
+                                    <?php endif; ?>
+                                    <?php if ($item['price_large']): ?>
+                                        <div class="price-option">
+                                            <span class="size-label">1L</span>
+                                            <span class="price">₱<?= number_format($item['price_large'], 2) ?></span>
+                                        </div>
+                                    <?php endif; ?>
+                                </div>
+                                <button class="btn btn-add-to-cart" onclick="openAddToCartModal('<?= htmlspecialchars($item['product_id']) ?>', '<?= htmlspecialchars(addslashes($item['product_name'])) ?>', <?= $item['price_small'] ?? 0 ?>, <?= $item['price_medium'] ?? 0 ?>, <?= $item['price_large'] ?? 0 ?>)">
+                                    + Add to Cart
+                                </button>
+                            </div>
                         <?php endforeach; ?>
-                    </select>
-                    <button type="submit" class="btn btn-secondary">Filter</button>
-                    <?php if (!empty($search) || !empty($filter_category)): ?>
-                        <a href="index.php#menu" class="btn btn-outline">Clear</a>
                     <?php endif; ?>
-                </form>
-            </div>
+                </div>
+            </section>
+        </main>
 
-            <!-- Menu Items Grid -->
-            <div class="menu-grid">
-                <?php if (empty($menu_items)): ?>
-                    <p class="no-items">No items found.</p>
-                <?php else: ?>
-                    <?php foreach ($menu_items as $item): ?>
-                        <div class="menu-item">
-                            <div class="item-header">
-                                <h4><?= htmlspecialchars($item['product_name']) ?></h4>
-                                <span class="item-category"><?= htmlspecialchars($item['category']) ?></span>
-                            </div>
-                            <div class="item-prices">
-                                <?php if ($item['price_small']): ?>
-                                    <div class="price-option">
-                                        <span class="size-label">16oz</span>
-                                        <span class="price">₱<?= number_format($item['price_small'], 2) ?></span>
-                                    </div>
-                                <?php endif; ?>
-                                <?php if ($item['price_medium']): ?>
-                                    <div class="price-option">
-                                        <span class="size-label">22oz</span>
-                                        <span class="price">₱<?= number_format($item['price_medium'], 2) ?></span>
-                                    </div>
-                                <?php endif; ?>
-                                <?php if ($item['price_large']): ?>
-                                    <div class="price-option">
-                                        <span class="size-label">1L</span>
-                                        <span class="price">₱<?= number_format($item['price_large'], 2) ?></span>
-                                    </div>
-                                <?php endif; ?>
-                            </div>
-                            <button class="btn btn-add-to-cart" onclick="openAddToCartModal('<?= htmlspecialchars($item['product_id']) ?>', '<?= htmlspecialchars(addslashes($item['product_name'])) ?>', <?= $item['price_small'] ?? 0 ?>, <?= $item['price_medium'] ?? 0 ?>, <?= $item['price_large'] ?? 0 ?>)">
-                                Add to Cart
-                            </button>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+        <!-- Right Sidebar - Cart/Order -->
+        <aside class="sidebar-cart">
+            <div class="cart-header">
+                <h3>MY ORDER</h3>
             </div>
-        </div>
-    </section>
-
-    <!-- Cart Section -->
-    <section class="cart-section" id="cart">
-        <div class="container">
-            <h2 class="section-title">Your Cart</h2>
 
             <?php if (empty($_SESSION['cart'])): ?>
-                <p class="empty-cart">Your cart is empty. <a href="#menu">Browse our menu</a></p>
+                <div class="empty-cart-side">
+                    <p>🛒</p>
+                    <p>Your cart is empty</p>
+                </div>
             <?php else: ?>
-                <form method="POST" action="index.php" class="cart-form">
-                    <table class="cart-table">
-                        <thead>
-                            <tr>
-                                <th>Item</th>
-                                <th>Size</th>
-                                <th>Price</th>
-                                <th>Quantity</th>
-                                <th>Subtotal</th>
-                                <th>Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <?php foreach ($_SESSION['cart'] as $cart_item_id => $item): ?>
-                                <tr>
-                                    <td><?= htmlspecialchars($item['product_name']) ?></td>
-                                    <td><?= htmlspecialchars($item['size']) ?></td>
-                                    <td>₱<?= number_format($item['price'], 2) ?></td>
-                                    <td>
-                                        <input type="number" name="quantity[<?= $cart_item_id ?>]" value="<?= $item['quantity'] ?>" min="1" class="quantity-input">
-                                    </td>
-                                    <td>₱<?= number_format($item['price'] * $item['quantity'], 2) ?></td>
-                                    <td>
-                                        <a href="index.php?remove_from_cart=<?= urlencode($cart_item_id) ?>#cart" class="btn-remove">Remove</a>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                        <tfoot>
-                            <tr class="cart-total">
-                                <td colspan="4"><strong>Total:</strong></td>
-                                <td colspan="2"><strong>₱<?= number_format($cart_total, 2) ?></strong></td>
-                            </tr>
-                        </tfoot>
-                    </table>
+                <div class="cart-items-list">
+                    <?php foreach ($_SESSION['cart'] as $cart_item_id => $item): ?>
+                        <div class="cart-item-row">
+                            <div class="cart-item-info">
+                                <p class="cart-item-name"><?= htmlspecialchars($item['product_name']) ?></p>
+                                <p class="cart-item-size"><?= htmlspecialchars($item['size']) ?></p>
+                            </div>
+                            <div class="cart-item-actions">
+                                <button class="qty-btn" onclick="changeQty('<?= $cart_item_id ?>', -1)">−</button>
+                                <span class="qty-display"><?= $item['quantity'] ?></span>
+                                <button class="qty-btn" onclick="changeQty('<?= $cart_item_id ?>', 1)">+</button>
+                            </div>
+                            <p class="cart-item-price">₱<?= number_format($item['price'] * $item['quantity'], 2) ?></p>
+                            <a href="index.php?remove_from_cart=<?= urlencode($cart_item_id) ?>" class="btn-remove">✕</a>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
 
-                    <div class="cart-actions">
-                        <button type="submit" name="update_cart" class="btn btn-secondary">Update Cart</button>
-                        <button type="button" onclick="document.getElementById('checkoutModal').style.display='block'" class="btn btn-primary">Proceed to Checkout</button>
+                <div class="cart-divider"></div>
+
+                <div class="cart-summary">
+                    <div class="summary-row">
+                        <span>Subtotal:</span>
+                        <span>₱<?= number_format($cart_total, 2) ?></span>
                     </div>
-                </form>
+                    <div class="summary-row">
+                        <span>Delivery:</span>
+                        <span>₱0.00</span>
+                    </div>
+                    <div class="summary-row total">
+                        <span>Total:</span>
+                        <span>₱<?= number_format($cart_total, 2) ?></span>
+                    </div>
+                </div>
+
+                <button type="button" onclick="document.getElementById('checkoutModal').style.display='block'" class="btn btn-primary btn-checkout">
+                    CHECKOUT
+                </button>
             <?php endif; ?>
-        </div>
-    </section>
+
+            <div class="location-selector">
+                <div class="location-item">
+                    <span class="location-icon">📍</span>
+                    <span>New York</span>
+                    <span class="dropdown">▼</span>
+                </div>
+                <div class="location-item">
+                    <span class="location-icon">📍</span>
+                    <span>Select a Street</span>
+                    <span class="dropdown">▼</span>
+                </div>
+            </div>
+        </aside>
+    </div>
 
     <!-- Add to Cart Modal -->
     <div id="addToCartModal" class="modal">
@@ -408,6 +430,48 @@ foreach ($_SESSION['cart'] as $item) {
     </footer>
 
     <script>
+        // Search functionality
+        document.getElementById('searchInput')?.addEventListener('keyup', function(e) {
+            const searchTerm = this.value;
+            if (searchTerm.length > 0) {
+                window.location.href = '?search=' + encodeURIComponent(searchTerm);
+            }
+        });
+
+        // Change quantity via sidebar buttons
+        function changeQty(cartItemId, delta) {
+            const form = document.createElement('form');
+            form.method = 'POST';
+            form.action = 'index.php';
+            
+            // Get current quantities
+            <?php if (!empty($_SESSION['cart'])): ?>
+            const quantities = {
+                <?php foreach ($_SESSION['cart'] as $cart_item_id => $item): ?>
+                '<?= $cart_item_id ?>': <?= $item['quantity'] ?>,
+                <?php endforeach; ?>
+            };
+            <?php else: ?>
+            const quantities = {};
+            <?php endif; ?>
+            
+            const newQty = (quantities[cartItemId] || 0) + delta;
+            if (newQty > 0) {
+                quantities[cartItemId] = newQty;
+            } else {
+                window.location.href = 'index.php?remove_from_cart=' + encodeURIComponent(cartItemId);
+                return;
+            }
+            
+            // Create form with all quantities
+            form.innerHTML = '<input type="hidden" name="update_cart" value="1">';
+            for (let id in quantities) {
+                form.innerHTML += `<input type="hidden" name="quantity[${id}]" value="${quantities[id]}">`;
+            }
+            document.body.appendChild(form);
+            form.submit();
+        }
+
         // Add to Cart Modal
         function openAddToCartModal(productId, productName, priceSmall, priceMedium, priceLarge) {
             document.getElementById('modal_product_id').value = productId;

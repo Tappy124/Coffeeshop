@@ -123,10 +123,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <button type="submit">Create Account</button>
         </form>
 
-        <div class="text-right" style="margin-top: 20px;">
+        <div class="text-right mt-20">
             <a href="login.php" class="muted-link">Already have an account? Login here</a>
         </div>
-        <div class="text-right" style="margin-top: 10px;">
+        <div class="text-right mt-10">
             <a href="index.php" class="muted-link">Back to Homepage</a>
         </div>
     </div>

@@ -221,7 +221,7 @@ $conn->close();
                         <td><?= date('M d, Y h:i A', strtotime($record['record_date'])) ?></td>
                     </tr>
                 <?php endforeach; else: ?>
-                    <tr><td colspan="8" style="text-align:center;">No records found for the selected criteria.</td></tr>
+                    <tr><td colspan="8" class="text-center-inline">No records found for the selected criteria.</td></tr>
                 <?php endif; ?>
                 </tbody>
             </table>

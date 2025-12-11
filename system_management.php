@@ -111,29 +111,283 @@ $result = $stmt->get_result();
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="css/modal.css">
     <link rel="stylesheet" href="css/extracted_styles.css">
+    <link rel="icon" type="image/x-icon" href="images/logo.png">
 </head>
 <body>
 <div class="container">
-  <!-- ...existing HTML... -->
-  <?php // Reuse the existing markup below (kept concise here) ?>
-  <!-- Sidebar and main content -->
-  <aside class="sidebar"> ...existing code... </aside>
-  <main class="main"> ...existing code... </main>
+    <aside class="sidebar">
+        <div class="logo"><img src="images/logo.png" alt="Logo"></div>
+        <h2>Admin Dashboard</h2>
+        <ul>
+            <li><a href="admin_dashboard.php">Dashboard</a></li>
+            <li><a href="inventory_products.php">Inventory Items</a></li>
+            <li><a href="products_menu.php">Menu Items</a></li>
+            <li><a href="supplier_management.php">Supplier</a></li>
+            <li><a href="sales_and_waste.php">Sales & Waste</a></li>
+            <li><a href="reports_and_analytics.php">Reports & Analytics</a></li>
+            <li><a href="admin_forecasting.php">Forecasting</a></li>
+            <li><a href="system_management.php" class="active">System Management</a></li>
+            <li><a href="user_account.php">My Account</a></li>
+            <li><a href="logout.php">Logout</a></li>
+        </ul>
+    </aside>
+
+    <main class="main">
+        <header>
+            <div class="top-row">
+                <h1>System Management</h1>
+                <div class="header-actions flex-gap-center">
+                    <button class="btn add-btn" id="addUserBtn">+ Add New User</button>
+                </div>
+            </div>
+        </header>
+
+        <div class="filter-bar">
+            <div class="filter-form">
+                <input type="text" id="searchInput" placeholder="Search users...">
+            </div>
+        </div>
+
+        <div class="content-wrapper content-scroll">
+            <section class="box">
+                <h2>User Management</h2>
+                <div class="table-container">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Name</th>
+                                <th>Username</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <?php if ($result && $result->num_rows > 0): ?>
+                                <?php while ($row = $result->fetch_assoc()): ?>
+                                    <tr>
+                                        <td><?= htmlspecialchars($row['id']) ?></td>
+                                        <td><?= htmlspecialchars($row['name']) ?></td>
+                                        <td><?= htmlspecialchars($row['username']) ?></td>
+                                        <td><?= htmlspecialchars($row['role']) ?></td>
+                                        <td>
+                                            <span class="status-badge <?= $row['status'] === 'Active' ? 'status-active' : 'status-inactive' ?>">
+                                                <?= htmlspecialchars($row['status']) ?>
+                                            </span>
+                                        </td>
+                                        <td class="action-buttons">
+                                            <button class="action-btn edit-btn"
+                                                data-id="<?= $row['id'] ?>"
+                                                data-name="<?= htmlspecialchars($row['name']) ?>"
+                                                data-username="<?= htmlspecialchars($row['username']) ?>"
+                                                data-role="<?= htmlspecialchars($row['role']) ?>"
+                                                data-status="<?= htmlspecialchars($row['status']) ?>">
+                                                Edit
+                                            </button>
+                                            <?php if ($row['status'] === 'Active'): ?>
+                                                <form method="POST" style="display: inline;">
+                                                    <input type="hidden" name="deactivate_id" value="<?= $row['id'] ?>">
+                                                    <input type="hidden" name="deactivate_user" value="1">
+                                                    <button type="button" class="action-btn deactivate-btn">Deactivate</button>
+                                                </form>
+                                            <?php endif; ?>
+                                            <?php if ((int)$row['id'] !== (int)$_SESSION['user_id']): ?>
+                                                <form method="POST" style="display: inline;">
+                                                    <input type="hidden" name="delete_id" value="<?= $row['id'] ?>">
+                                                    <input type="hidden" name="delete_user" value="1">
+                                                    <button type="button" class="action-btn delete-btn">Delete</button>
+                                                </form>
+                                            <?php endif; ?>
+                                        </td>
+                                    </tr>
+                                <?php endwhile; ?>
+                            <?php else: ?>
+                                <tr><td colspan="6" style="text-align:center;">No users found.</td></tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+    </main>
 </div>
+
+<!-- Add User Modal -->
+<div class="modal" id="addUserModal">
+    <div class="modal-content">
+        <span class="close" id="closeAddModal">&times;</span>
+        <h2>Add New User</h2>
+        <form method="POST" id="addUserForm">
+            <div class="form-group">
+                <label for="name">Full Name:</label>
+                <input type="text" id="name" name="name" required>
+            </div>
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group password-field">
+                <label for="password">Password:</label>
+                <div class="password-wrapper">
+                    <input type="password" id="password" name="password" required>
+                    <span class="toggle-password-visibility" data-for="password">👁</span>
+                </div>
+                <small id="password-strength-text" class="password-strength"></small>
+            </div>
+            <div class="form-group password-field">
+                <label for="confirm_password">Confirm Password:</label>
+                <div class="password-wrapper">
+                    <input type="password" id="confirm_password" name="confirm_password" required>
+                    <span class="toggle-password-visibility" data-for="confirm_password">👁</span>
+                </div>
+                <small id="confirm-password-strength-text" class="password-strength"></small>
+            </div>
+            <div class="form-group">
+                <label for="role">Role:</label>
+                <select id="role" name="role" required>
+                    <option value="Admin">Admin</option>
+                    <option value="Staff">Staff</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="submit" name="add_user" class="btn">Add User</button>
+                <button type="button" class="cancel-btn" id="cancelAddBtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Edit User Modal -->
+<div class="modal" id="editModal">
+    <div class="modal-content">
+        <span class="close" id="closeEditModal">&times;</span>
+        <h2>Edit User</h2>
+        <form method="POST" id="editUserForm">
+            <input type="hidden" id="edit_id" name="edit_id">
+            <div class="form-group">
+                <label for="edit_name">Full Name:</label>
+                <input type="text" id="edit_name" name="edit_name" required>
+            </div>
+            <div class="form-group">
+                <label for="edit_username">Username:</label>
+                <input type="text" id="edit_username" name="edit_username" required>
+            </div>
+            <div class="form-group">
+                <label for="edit_role">Role:</label>
+                <select id="edit_role" name="edit_role" required>
+                    <option value="Admin">Admin</option>
+                    <option value="Staff">Staff</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label for="edit_status">Status:</label>
+                <select id="edit_status" name="edit_status" required>
+                    <option value="Active">Active</option>
+                    <option value="Inactive">Inactive</option>
+                </select>
+            </div>
+            <div class="form-actions">
+                <button type="submit" name="edit_user" class="btn">Update User</button>
+                <button type="button" class="cancel-btn" id="cancelEditBtn">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Confirmation Modal -->
+<div class="modal" id="confirmModal">
+    <div class="modal-content">
+        <span class="close" id="closeConfirmModal">&times;</span>
+        <h2>Please Confirm</h2>
+        <p id="confirmMessage" class="text-center confirm-message"></p>
+        <div class="form-actions">
+            <button type="button" class="confirm-btn-yes" id="confirmYesBtn">Confirm</button>
+            <button type="button" class="cancel-btn" id="confirmCancelBtn">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<!-- Toast Notification -->
+<div id="toast" class="toast"></div>
+
 <script>
-// Minimal JS to preserve modal and form behaviors (kept concise for clarity).
-document.addEventListener('DOMContentLoaded', function(){
-  // Basic modal handling and form confirmations are implemented in other pages; keep this minimal.
-});
-</script>
-</body>
-</html>
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Modal Elements ---
+    const addUserModal = document.getElementById('addUserModal');
+    const editModal = document.getElementById('editModal');
+    const confirmModal = document.getElementById('confirmModal');
+    const addUserBtn = document.getElementById('addUserBtn');
+    const closeAddModal = document.getElementById('closeAddModal');
+    const closeEditModal = document.getElementById('closeEditModal');
+    const closeConfirmModal = document.getElementById('closeConfirmModal');
+    const cancelAddBtn = document.getElementById('cancelAddBtn');
+    const cancelEditBtn = document.getElementById('cancelEditBtn');
+    const confirmCancelBtn = document.getElementById('confirmCancelBtn');
+    const addUserForm = document.getElementById('addUserForm');
+    const editUserForm = document.getElementById('editUserForm');
+
+    // --- Open Add User Modal ---
+    addUserBtn.addEventListener('click', () => {
+        addUserModal.style.display = 'block';
+    });
+
+    // --- Close Modals ---
+    closeAddModal.addEventListener('click', () => {
+        addUserModal.style.display = 'none';
+    });
+    closeEditModal.addEventListener('click', () => {
+        editModal.style.display = 'none';
+    });
+    closeConfirmModal.addEventListener('click', () => {
+        confirmModal.style.display = 'none';
+    });
+    cancelAddBtn.addEventListener('click', () => {
+        addUserModal.style.display = 'none';
+    });
+    cancelEditBtn.addEventListener('click', () => {
+        editModal.style.display = 'none';
+    });
+    confirmCancelBtn.addEventListener('click', () => {
+        confirmModal.style.display = 'none';
+    });
+
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        if (e.target === addUserModal) addUserModal.style.display = 'none';
+        if (e.target === editModal) editModal.style.display = 'none';
+        if (e.target === confirmModal) confirmModal.style.display = 'none';
+    });
+
+    // --- Add User Form Validation & Confirmation ---
+    addUserForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm_password').value;
+
+        if (password !== confirmPassword) {
+            alert('Passwords do not match!');
+            return;
+        }
+
+        // Check if username already exists
+        fetch('api_check_username.php?username=' + encodeURIComponent(username))
+            .then(response => response.json())
+            .then(data => {
+                if (data.exists) {
+                    alert('Username already exists. Please choose a different username.');
+                } else {
                     // If username is unique, proceed to confirmation
                     document.getElementById('confirmMessage').textContent = 'Are you sure you want to add this new user?';
                     document.getElementById('confirmYesBtn').textContent = 'Yes, Add User';
+                    document.getElementById('confirmYesBtn').style.backgroundColor = ''; // Reset color
                     confirmModal.style.display = 'block';
 
                     document.getElementById('confirmYesBtn').onclick = function() {
+                        addUserModal.style.display = 'none';
+                        confirmModal.style.display = 'none';
                         addUserForm.submit();
                     };
                 }
@@ -231,8 +485,13 @@ document.addEventListener('DOMContentLoaded', function(){
         e.preventDefault(); // Stop submission to show confirmation
         document.getElementById('confirmMessage').textContent = 'Are you sure you want to update this user\'s details?';
         document.getElementById('confirmYesBtn').textContent = 'Yes, Update';
+        document.getElementById('confirmYesBtn').style.backgroundColor = ''; // Reset color
         confirmModal.style.display = 'block';
-        document.getElementById('confirmYesBtn').onclick = () => editUserForm.submit();
+        document.getElementById('confirmYesBtn').onclick = () => {
+            editModal.style.display = 'none';
+            confirmModal.style.display = 'none';
+            editUserForm.submit();
+        };
     });
 
     // --- Edit Button Logic ---
@@ -250,6 +509,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // --- Deactivate Button Logic ---
     document.querySelectorAll('.deactivate-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            e.preventDefault();
             const form = e.target.closest('form');
             const userId = form.querySelector('input[name="deactivate_id"]').value;
             const currentUserId = '<?= $_SESSION['user_id'] ?>';
@@ -261,9 +521,11 @@ document.addEventListener('DOMContentLoaded', function(){
             }
             document.getElementById('confirmMessage').innerHTML = message;
             document.getElementById('confirmYesBtn').textContent = 'Yes, Deactivate';
+            document.getElementById('confirmYesBtn').style.backgroundColor = ''; // Reset color
             confirmModal.style.display = 'block';
 
             document.getElementById('confirmYesBtn').onclick = function() {
+                confirmModal.style.display = 'none';
                 form.submit();
             };
         });
@@ -272,6 +534,7 @@ document.addEventListener('DOMContentLoaded', function(){
     // --- Permanent Delete Button Logic ---
     document.querySelectorAll('.delete-btn').forEach(btn => {
         btn.addEventListener('click', (e) => {
+            e.preventDefault();
             const form = e.target.closest('form');
             const userName = form.closest('tr').querySelector('td:nth-child(2)').textContent;
             
@@ -281,12 +544,12 @@ document.addEventListener('DOMContentLoaded', function(){
             confirmModal.style.display = 'block';
 
             document.getElementById('confirmYesBtn').onclick = function() {
-                form.submit();
+                confirmModal.style.display = 'none';
                 document.getElementById('confirmYesBtn').style.backgroundColor = ''; // Reset color
+                form.submit();
             };
         });
     });
-
 
     // --- Toast Message ---
     const toast = document.getElementById("toast");
@@ -300,31 +563,31 @@ document.addEventListener('DOMContentLoaded', function(){
     const errorMsg = localStorage.getItem("systemError");
     if (errorMsg) {
         toast.textContent = errorMsg;
-        toast.classList.add("show", "error"); // Add error class for styling
-        // Show error for longer
+        toast.classList.add("show", "error");
         setTimeout(() => toast.classList.remove("show", "error"), 5000);
         localStorage.removeItem("systemError");
     }
 
     // --- Logout Confirmation ---
     const logoutLink = document.querySelector('a[href="logout.php"]');
-    logoutLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        const confirmBtn = document.getElementById('confirmYesBtn');
-        document.getElementById('confirmMessage').textContent = 'Are you sure you want to log out?';
-        confirmBtn.textContent = 'Yes, Logout';
-        confirmBtn.className = 'confirm-btn-yes btn-logout-yes'; // Add logout specific class
-        confirmModal.style.display = 'block';
-        confirmBtn.onclick = function() {
-            window.location.href = 'logout.php';
-        };
-    });
+    if (logoutLink) {
+        logoutLink.addEventListener('click', function(e) {
+            e.preventDefault();
+            const confirmBtn = document.getElementById('confirmYesBtn');
+            document.getElementById('confirmMessage').textContent = 'Are you sure you want to log out?';
+            confirmBtn.textContent = 'Yes, Logout';
+            confirmBtn.className = 'confirm-btn-yes btn-logout-yes';
+            confirmModal.style.display = 'block';
+            confirmBtn.onclick = function() {
+                window.location.href = 'logout.php';
+            };
+        });
+    }
 
     // --- Live Search Filter ---
     const searchInput = document.getElementById('searchInput');
     const tableBody = document.getElementById('userTableBody');
     const tableRows = tableBody.getElementsByTagName('tr');
-    const noResultsRow = tableBody.querySelector('td[colspan="6"]');
 
     searchInput.addEventListener('keyup', function() {
         const searchTerm = searchInput.value.toLowerCase();
@@ -332,26 +595,19 @@ document.addEventListener('DOMContentLoaded', function(){
 
         for (let i = 0; i < tableRows.length; i++) {
             const row = tableRows[i];
-            // Skip the 'No users found' row
-            if (row.contains(noResultsRow)) continue;
-
             const rowText = row.textContent.toLowerCase();
 
             if (rowText.includes(searchTerm)) {
-                row.style.display = ''; // Show row
+                row.style.display = '';
                 visibleRows++;
             } else {
-                row.style.display = 'none'; // Hide row
+                row.style.display = 'none';
             }
-        }
-
-        if (noResultsRow) {
-            // Show 'No users found' row if no other rows are visible
-            noResultsRow.parentElement.style.display = (visibleRows === 0) ? '' : 'none';
         }
     });
 });
 </script>
+
 <style>
 .status-badge {
     padding: 4px 8px;
@@ -361,17 +617,16 @@ document.addEventListener('DOMContentLoaded', function(){
     text-transform: uppercase;
 }
 .status-active {
-    background-color: #e0f2f1; /* light green */
-    color: #00796b; /* dark green */
+    background-color: #e0f2f1;
+    color: #00796b;
 }
 .status-inactive {
-    background-color: #ffebee; /* light red */
-    color: #c62828; /* dark red */
+    background-color: #ffebee;
+    color: #c62828;
 }
 .toast.error {
-    background-color: #c62828; /* Red for errors */
+    background-color: #c62828;
 }
-
 .action-btn.deactivate-btn {
     background-color: #fffde7;
     color: #f57f17;
@@ -381,7 +636,45 @@ document.addEventListener('DOMContentLoaded', function(){
     background-color: #fff9c4;
     color: #e65100;
 }
-
+.password-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+.toggle-password-visibility {
+    position: absolute;
+    right: 10px;
+    cursor: pointer;
+    user-select: none;
+    font-size: 1.2rem;
+}
+.toggle-password-visibility.visible {
+    opacity: 0.5;
+}
+.password-strength {
+    display: block;
+    margin-top: 4px;
+    font-size: 0.85rem;
+    font-weight: 600;
+}
+.strength-strong {
+    color: #2e7d32;
+}
+.strength-medium {
+    color: #f57c00;
+}
+.strength-weak {
+    color: #d84315;
+}
+.strength-very-weak {
+    color: #c62828;
+}
+.password-match {
+    color: #2e7d32;
+}
+.password-mismatch {
+    color: #c62828;
+}
 </style>
 </body>
 </html>

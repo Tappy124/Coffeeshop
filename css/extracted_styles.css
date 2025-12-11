@@ -153,12 +153,12 @@
 /* Notification styles extracted from staff_dashboard.php */
 .low-stock-alert { background-color: #ffebee !important; color: #c62828; font-weight: bold; }
 .medium-stock-alert { background-color: #fffde7 !important; color: #f57f17; }
-.notification-wrapper { position: relative; }
-.notification-bell { cursor: pointer; position: relative; }
+.notification-wrapper { position: relative; z-index: 100; }
+.notification-bell { cursor: pointer; position: relative; z-index: 100; }
 .notification-bell svg { width: 24px; height: 24px; fill: var(--subtext); }
 .notification-bell:hover svg { fill: var(--text); }
 .notification-count { position: absolute; top: -5px; right: -8px; background-color: #c62828; color: white; border-radius: 50%; width: 18px; height: 18px; font-size: 11px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid var(--panel); }
-.notification-dropdown { display: none; position: absolute; top: 100%; right: 0; width: 320px; background-color: var(--panel); box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1001; overflow: hidden; }
+.notification-dropdown { display: none; position: absolute; top: 100%; right: -150px; width: 350px; background-color: var(--panel); box-shadow: 0 4px 12px rgba(0,0,0,0.15); border-radius: 8px; z-index: 1001; overflow: hidden; margin-top: 5px; }
 .notification-header { padding: 12px 16px; border-bottom: 1px solid var(--muted); }
 .notification-header h3 { margin: 0; font-size: 1rem; }
 .notification-body { max-height: 300px; overflow-y: auto; }
@@ -260,3 +260,26 @@ body.dark-mode .forecast-warning {
 
 /* medium chart container used in forecasting pages */
 .chart-container-medium { margin-top: 20px; height: 350px; cursor: pointer; }
+
+/* Utility classes for spacing and alignment */
+.mt-20 { margin-top: 20px; }
+.mt-10 { margin-top: 10px; }
+.text-center-inline { text-align: center; }
+
+/* Status color utilities */
+.status-received { color: #28a745; }
+.status-pending { color: #c62828; }
+
+/* Layout utilities for reports and analytics */
+.flex-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.chart-height-400 { height: 400px; }
+.chart-height-70vh { height: 70vh; }
+.modal-width-900 { max-width: 80%; width: 900px; }
+.colspan-center { text-align: center; }
+.muted-note { font-size: 0.8rem; color: var(--subtext); margin-top: -5px; margin-bottom: 15px; }
+.recipe-divider { display: none; }
+.recipe-section { display: none; }
+.recipe-section.visible { display: block; }
+.mt-30 { margin-top: 30px; }
+.box-padded { padding: 20px; }
+.inline { display: inline; }
